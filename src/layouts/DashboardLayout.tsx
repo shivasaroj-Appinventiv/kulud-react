@@ -19,6 +19,7 @@ const DashboardLayout = ({ children, name }: DashboardLayoutProps) => {
   const userData = useAppSelector((state) => state.auth.admin);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const imagePrefix = import.meta.env.imagePrefix;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openProfileMenu = Boolean(anchorEl);
@@ -98,7 +99,7 @@ const DashboardLayout = ({ children, name }: DashboardLayoutProps) => {
           >
             {userData?.profilePicture ? (
               <img
-                src={userData.profilePicture}
+                src={userData&& userData.profilePicture? imagePrefix+userData.profilePicture:""}
                 alt="user"
                 className="w-10 h-10 rounded-full object-cover"
               />

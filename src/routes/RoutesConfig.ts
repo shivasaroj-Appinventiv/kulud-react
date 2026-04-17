@@ -13,6 +13,8 @@ const EditOrganizationDetails = lazy(()=>import("../modules/features/organizatio
 const Profile = lazy(()=>import("../modules/features//my-profile"));
 const ResetPassword = lazy(()=>import("../modules/auth/reset-password"));
 const UserManagement = lazy(()=>import("../modules/features//user-management/user-list"))
+const UserDetails = lazy(()=>import("../modules/features//user-management/user-details"))
+
 const config: Omit<Route, "id">[] = [
   {
     name: PAGE_HEADINGS.LOGIN,
@@ -86,6 +88,13 @@ const config: Omit<Route, "id">[] = [
     name:PAGE_HEADINGS.USER_MANAGEMENT,
     path:ROUTES.USER_MANAGEMENT,
     component:UserManagement,
+    Layout:DashboardLayout,
+    isPrivate:true
+  },
+  {
+    name:PAGE_HEADINGS.USER_DETAILS,
+    path:ROUTES.USER_DETAILS_,
+    component:UserDetails,
     Layout:DashboardLayout,
     isPrivate:true
   }

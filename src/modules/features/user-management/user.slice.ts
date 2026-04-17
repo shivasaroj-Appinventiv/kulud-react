@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { User, UserManagementSlice } from "./user-management.interfaces";
+import type {  UserManagementSlice } from "./user-management.interfaces";
 import { setLoading } from "../../../redux/slices/global.slice";
 import { http } from "../../../api/http.service";
 import endPoints from "../../../api/endPoints";
@@ -25,8 +25,8 @@ const userManagementSlice = createSlice({
         state.usersList=action.payload.items;
         state.totalDocs=action.payload.meta.totalItems;
     });
-    builder.addCase(getUserDetails.fulfilled,(state,action)=>{
-      state.details=action.payload.data
+    builder.addCase(getUserDetails.fulfilled,(state,action)=>{      
+      state.details=action.payload
     })
   },
 });
@@ -56,8 +56,10 @@ export const getUserDetails = createAsyncThunk(
       thunkAPI.dispatch(setLoading(true));
 
       const response=await http.get<ApiResponse<any>>(endPoints.userDetails(userId));
-
+      console.log(response);
+      
       const {data}=response.data;
+      
       return data;
 
     } catch (error) {
