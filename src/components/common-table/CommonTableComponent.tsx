@@ -6,9 +6,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Loader2,
+  ListFilterIcon,
 } from "lucide-react";
 import { useCommonTableHelper } from "./common-table.helper";
 import type { CommonTableProps } from "./common-table.interfe";
+import { Skeleton } from "@mui/material";
 
 const CommonTableComponent = <T,>({
   columns,
@@ -21,6 +23,9 @@ const CommonTableComponent = <T,>({
   handlePageOptionsChanged,
   pageSize = 10,
   title,
+  children,
+  onToggleFilter,
+  isFilterApplied,
 }: CommonTableProps<T>) => {
   const {
     searchInput,
@@ -38,7 +43,7 @@ const CommonTableComponent = <T,>({
   });
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+    <div className="bg-white border border-gray-200 rounded-2xl  shadow-sm">
       {/* Table Header */}
       <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between gap-4 flex-wrap">
         <div>
@@ -51,21 +56,35 @@ const CommonTableComponent = <T,>({
         </div>
 
         {/* Search */}
-        <div className="relative">
-          <Search
-            size={14}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-          />
-          <input
-            type="text"
-            value={searchInput}
-            placeholder={searchPlaceHolder || "Search..."}
-            onChange={(e) => setSearchInput(e.target.value)}
-            className="pl-9 pr-4 h-9 w-60 text-sm bg-gray-50 border border-gray-200 rounded-lg
+
+        <div className="filter flex item-center gap-2 relative">
+          <div className="relative">
+            <Search
+              size={14}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+            />
+            <input
+              type="text"
+              value={searchInput}
+              placeholder={searchPlaceHolder || "Search..."}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="pl-9 pr-4 h-9 w-60 text-sm bg-gray-50 border border-gray-200 rounded-lg
                        placeholder:text-gray-400 text-gray-800
                        focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400
                        transition-all duration-150"
-          />
+            />
+          </div>
+
+          <button
+            onClick={onToggleFilter}
+            className={`h-9 w-9 flex items-center justify-center border rounded-lg bg-gray-50 hover:bg-gray-100 cursor-pointer ${
+              isFilterApplied ? "bg-blue-100 text-blue-600" : "bg-gray-50"
+            }`}
+          >
+            <ListFilterIcon />
+          </button>
+
+          {children}
         </div>
       </div>
 
@@ -125,14 +144,28 @@ const CommonTableComponent = <T,>({
 
           <tbody className="divide-y divide-gray-50">
             {loading ? (
-              <tr>
-                <td colSpan={columns.length} className="py-16 text-center">
-                  <div className="flex items-center justify-center gap-2 text-gray-400 text-sm">
-                    <Loader2 size={16} className="animate-spin text-blue-500" />
-                    <span>Loading...</span>
-                  </div>
-                </td>
-              </tr>
+              // <tr>
+              //   <td colSpan={columns.length} className="py-16 text-center">
+              //     <div className="flex items-center justify-center gap-2 text-gray-400 text-sm">
+              //       <Loader2 size={16} className="animate-spin text-blue-500" />
+              //       <span>Loading...</span>
+              //     </div>
+              //           </td>
+              //       </tr>
+
+              <>
+                {Array(5)
+                  .fill(0)
+                  .map((_, index) => (
+                    <tr key={index}>
+                      {columns.map((column, colIndex) => (
+                        <td key={colIndex} className="px-5 py-3.5">
+                          <Skeleton />
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+              </>
             ) : data.length === 0 ? (
               <tr>
                 <td colSpan={columns.length} className="py-16 text-center">
@@ -143,9 +176,11 @@ const CommonTableComponent = <T,>({
                     <p className="text-sm text-gray-400 font-medium">
                       No results found
                     </p>
-                   {searchInput.length>0&&( <p className="text-xs text-gray-300">
-                      Try adjusting your search
-                    </p>)}
+                    {searchInput.length > 0 && (
+                      <p className="text-xs text-gray-300">
+                        Try adjusting your search
+                      </p>
+                    )}
                   </div>
                 </td>
               </tr>

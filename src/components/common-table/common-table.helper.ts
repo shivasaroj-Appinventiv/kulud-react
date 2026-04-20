@@ -98,6 +98,7 @@ export const useCommonTableHelper = ({
     return pages;
   };
 
+  
   return {
     searchInput,
     setSearchInput,

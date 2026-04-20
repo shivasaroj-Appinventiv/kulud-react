@@ -19,7 +19,7 @@ export interface PaginatedQuery {
   search?: string;
   sortingBy?: string;
   sortingType?: typeof SortOrder[keyof typeof SortOrder];
-  filter?: any;
+  filters?: any;
 }
 
 export interface PaginatedResponse<T = any> {

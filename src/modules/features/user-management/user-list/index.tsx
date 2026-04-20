@@ -1,6 +1,8 @@
+import Breadcrumb from "../../../../components/breadcrumb";
 import CommonTableComponent from "../../../../components/common-table/CommonTableComponent";
 import { useUserListHelper } from "./userListHelper";
-
+import UserFilter from "../user-filter";
+import { useState } from "react";
 const userList = () => {
   const {
     usersList,
@@ -9,6 +11,14 @@ const userList = () => {
     handlePageOptionsChanged,
     onEdit,
     onDetails,
+    breadcrumbs,
+    showFilter,
+    handleToggleFilter,
+    handleCloseFilter,
+    handleApplyFilter,
+    isFilterApplied,
+    filters,
+    isLoading
   } = useUserListHelper();
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleString("en-IN", {
@@ -65,20 +75,31 @@ const userList = () => {
       ),
     },
   ];
-
+  
   return (
     <>
+      <Breadcrumb breadCrumbs={breadcrumbs}></Breadcrumb>
       <CommonTableComponent
         searchPlaceHolder="Search by name"
+        loading={isLoading}
         columns={columns}
         totalDocs={totalDocs}
         data={usersList}
         pageSize={10}
         pageOptions={pageOptions}
-        loading={false}
         handlePageOptionsChanged={handlePageOptionsChanged}
         onRowClick={(row) => {}}
-      />
+        onToggleFilter={handleToggleFilter}
+      >
+        {showFilter && (
+          <UserFilter
+            isApplied={isFilterApplied}
+            initialValues={filters}
+            onApply={handleApplyFilter}
+            onClose={handleCloseFilter}
+          />
+        )}
+      </CommonTableComponent>
     </>
   );
 };

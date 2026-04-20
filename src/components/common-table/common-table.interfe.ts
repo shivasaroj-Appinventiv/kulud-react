@@ -20,4 +20,8 @@ export interface CommonTableProps<T> {
   searchPlaceHolder?:string,
   handlePageOptionsChanged: (data: PaginatedQuery) => void;
   title?: string;
+  children?: React.ReactNode;
+  onToggleFilter?: () => void;
+  isFilterApplied?:boolean
+
 }

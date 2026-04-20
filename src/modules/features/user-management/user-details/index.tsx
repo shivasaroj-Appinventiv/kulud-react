@@ -1,14 +1,20 @@
+import Breadcrumb from "../../../../components/breadcrumb";
 import { useUserDetailsHelper } from "./user.details.helper";
 
 
 const UserDetails = () => {
   const imagePrefix = import.meta.env.imagePrefix;
 
-    const {details} = useUserDetailsHelper()
+    const {details,breadcrumbs} = useUserDetailsHelper()
 
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-6 relative">
+
+    <div className="breadcrumb">
+      <Breadcrumb breadCrumbs={breadcrumbs}></Breadcrumb>
+    </div>
+
       {/* Status Badge */}
       <div className="absolute top-4 right-4">
         <span className="px-4 py-1 rounded-full bg-green-100 text-green-600 text-sm font-medium">
