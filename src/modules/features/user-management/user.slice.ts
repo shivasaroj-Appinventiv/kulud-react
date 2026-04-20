@@ -32,12 +32,18 @@ const userManagementSlice = createSlice({
     builder.addCase(getUsersList.pending, (state) => {
       state.status = "loading";
     });
-    builder.addCase(getUsersList.rejected,(state,action)=>{
-      state.status="failed";
-    })
+    builder.addCase(getUsersList.rejected, (state, action) => {
+      state.status = "failed";
+    });
     builder.addCase(getUserDetails.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.details = action.payload;
+    });
+    builder.addCase(updateUserStatus.fulfilled, (state, action) => {
+      state.status = "succeeded";
+    });
+    builder.addCase(updateUserStatus.rejected, (state, action) => {
+      state.status = "failed";
     });
   },
 });
@@ -77,6 +83,23 @@ export const getUserDetails = createAsyncThunk(
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
+    } finally {
+      thunkAPI.dispatch(setLoading(false));
+    }
+  },
+);
+
+export const updateUserStatus = createAsyncThunk(
+  "userManagement/updateUserStatus",
+  async (payload: { type: string; userId: string }, thunkAPI) => {
+    try {
+      thunkAPI.dispatch(setLoading(true));
+      const response = await http.put<ApiResponse<any>>(
+        endPoints.USER_ACTIVATE_DEACTIVATE(payload.userId, payload.type),
+        {},
+      );
+      console.log(response);
+    } catch (error) {
     } finally {
       thunkAPI.dispatch(setLoading(false));
     }

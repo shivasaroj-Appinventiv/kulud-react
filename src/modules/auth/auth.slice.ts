@@ -39,6 +39,7 @@ export const authSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
       console.log("FULFILLED HIT", action.payload);
+      
       // state.admin = { ...state.admin, ...action.payload };
     });
     builder.addCase(login.rejected, (state, action) => {

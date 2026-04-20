@@ -1,4 +1,5 @@
 const adminService= "admin/api/v1";
+const SUB_ADMINS ="sub-admin";
 const endPoints = {
   //Admin endPoints
   logInAdmin: "admin/api/v1/login",
@@ -23,6 +24,8 @@ const endPoints = {
 
   userList:`${adminService}/sub-admins`,
   userDetails:(id:string)=> `${adminService}/sub-admins/${id}`,
+  USER_ACTIVATE_DEACTIVATE : (id: string | number, type: string) => `${adminService}/${SUB_ADMINS}/${id}/${type}`,
+
   
 };
 export const EVENT_DETAIL_BY_ID = (eventId: string) => `organizer/api/v1/organizer/panel-organizer-event-detail/${eventId}`;

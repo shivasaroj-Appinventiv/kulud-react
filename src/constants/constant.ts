@@ -1,0 +1,5 @@
+export const STATUS_TYPE_VALUE = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  PENDING: 'PENDING',
+};

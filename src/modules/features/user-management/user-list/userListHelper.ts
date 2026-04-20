@@ -8,9 +8,14 @@ import { useEffect, useState } from "react";
 import type { PaginatedQuery } from "../../../../interfaces/api.interface";
 import { DEFAULT_PAGE_OPTIONS } from "../../../../internal/api.constant";
 import { useNavigate } from "react-router-dom";
-import { getUsersList } from "../user.slice";
+import { getUsersList, updateUserStatus } from "../user.slice";
 import { ROUTES } from "../../../../routes/RouteConstant";
 import type { BreadCrumbType } from "../../../../components/breadcrumb/breadcrumb.helper";
+import type { User } from "../user-management.interfaces";
+import { COMMON_MESSAGES } from "../../../../constants/messages";
+import { DialogActionBtn } from "../../../../constants/dialog-btn.enum";
+import { STATUS_TYPE_VALUE } from "../../../../constants/constant";
+import { openDialog } from "../../../../redux/slices/global.slice";
 
 export const useUserListHelper = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -29,8 +34,8 @@ export const useUserListHelper = () => {
   };
 
   const handlePageOptionsChanged = (data: PaginatedQuery) => {
-    data= {...data,...data.filters};
-    delete data.filters
+    data = { ...data, ...data.filters };
+    delete data.filters;
     setPageOptions(data);
   };
 
@@ -41,7 +46,7 @@ export const useUserListHelper = () => {
   const { usersList, status, totalDocs } = useAppSelector(
     (state: RootState) => state.userManagement,
   );
-  const isLoading = status === "loading"; 
+  const isLoading = status === "loading";
 
   const [filters, setFilters] = useState({
     status: [],
@@ -50,12 +55,15 @@ export const useUserListHelper = () => {
   });
 
   const [showFilter, setShowFilter] = useState(false);
- 
 
   const handleApplyFilter = (values: any) => {
     setFilters(values);
-    
-    handlePageOptionsChanged({ ...pageOptions, page: 1,  filters:{ ...values, status:values.status.join(',')} });
+
+    handlePageOptionsChanged({
+      ...pageOptions,
+      page: 1,
+      filters: { ...values, status: values.status.join(",") },
+    });
     setIsFilterApplied(true);
     setShowFilter(false);
   };
@@ -67,6 +75,44 @@ export const useUserListHelper = () => {
   };
   const [isFilterApplied, setIsFilterApplied] = useState(false);
 
+  const updateStatus = async (data: { userId: string; type: string }) => {
+    const res = await dispatch(updateUserStatus(data)).unwrap();
+    console.log(res);
+
+    // if (res.data.status) {
+    //   navigate("/login");
+    // }
+  };
+  const onStatusUpdate = (userData: User) => {
+    const type =
+      userData.status === STATUS_TYPE_VALUE.ACTIVE ? "deactivate" : "activate";
+    const userId = userData.id;
+
+    const data = {
+      title:
+        userData.status === STATUS_TYPE_VALUE.ACTIVE
+          ? COMMON_MESSAGES.DEACTIVATED.title("User")
+          : COMMON_MESSAGES.ACTIVATED.title("User"),
+      headerText:
+        userData.status === STATUS_TYPE_VALUE.ACTIVE
+          ? COMMON_MESSAGES.ACCESS("restricted")
+          : COMMON_MESSAGES.ACCESS("restored"),
+      submitButtonText:
+        userData.status === STATUS_TYPE_VALUE.ACTIVE
+          ? DialogActionBtn.DEACTIVATE
+          : DialogActionBtn.ACTIVATE,
+      cancelButtonText: DialogActionBtn.CANCEL,
+    };
+    dispatch(
+      openDialog({
+        open: true,
+        message: data.headerText,
+        onConfirm: () => {
+          void updateStatus({ userId, type });
+        },
+      }),
+    );
+  };
   return {
     handlePageOptionsChanged,
     usersList,
@@ -83,6 +129,7 @@ export const useUserListHelper = () => {
     handleApplyFilter,
     isFilterApplied,
     filters,
-    isLoading
+    isLoading,
+    onStatusUpdate,
   };
 };

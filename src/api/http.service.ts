@@ -58,7 +58,7 @@ class Http {
       if (error && error.response) {
         const { message } = error.response.data;
         const {status}=error.response;
-        window.location.href='/login';
+        // window.location.href='/login';
         if (this.unAuthorizedStatusCodes.includes(status)) {
           localStorage.removeItem("token");
           store.dispatch({ type: "logout/LOGOUT" });

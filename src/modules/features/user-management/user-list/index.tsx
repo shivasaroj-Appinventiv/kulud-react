@@ -2,7 +2,9 @@ import Breadcrumb from "../../../../components/breadcrumb";
 import CommonTableComponent from "../../../../components/common-table/CommonTableComponent";
 import { useUserListHelper } from "./userListHelper";
 import UserFilter from "../user-filter";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Button, Menu, MenuItem } from "@mui/material";
+import { EllipsisVertical, EllipsisVerticalIcon } from "lucide-react";
 const userList = () => {
   const {
     usersList,
@@ -18,7 +20,8 @@ const userList = () => {
     handleApplyFilter,
     isFilterApplied,
     filters,
-    isLoading
+    isLoading,
+    onStatusUpdate
   } = useUserListHelper();
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleString("en-IN", {
@@ -28,6 +31,14 @@ const userList = () => {
       hour: "2-digit",
       minute: "2-digit",
     });
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const columns = [
     {
       header: "User Id",
@@ -66,16 +77,38 @@ const userList = () => {
       header: "Actions",
       accessor: "",
       render: (row: any) => (
-        <button
-          className="cursor-pointer text-blue-500"
-          onClick={() => onEdit(row)}
-        >
-          Edit
-        </button>
+        <div>
+          <Button
+            id="basic-button"
+            aria-controls={open ? "basic-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+          >
+            <EllipsisVertical />
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            slotProps={{
+              list: {
+                "aria-labelledby": "basic-button",
+              },
+            }}
+          >
+            <MenuItem onClick={()=>onDetails(row)}>Details</MenuItem>
+            <MenuItem onClick={onEdit}>Edit</MenuItem>
+            <MenuItem onClick={() => onStatusUpdate(row)}>
+              {row.status == "ACTIVE" ? "Deactivate" : "Activate"}
+            </MenuItem>
+          </Menu>
+        </div>
       ),
     },
   ];
-  
+
   return (
     <>
       <Breadcrumb breadCrumbs={breadcrumbs}></Breadcrumb>
