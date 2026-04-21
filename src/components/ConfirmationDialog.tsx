@@ -8,11 +8,13 @@ import {
 
 interface ConfirmationProps {
   message: string;
+  title:string;
   onConfirm: () => void;
   onCancel: () => void;
 }
 
 const ConfirmationDialog = ({
+  title,
   message,
   onConfirm,
   onCancel,
@@ -20,7 +22,7 @@ const ConfirmationDialog = ({
   return (
     <Dialog open={true} onClose={onCancel}>
       <DialogTitle className="text-lg font-semibold">
-        Confirm Action
+        {title?title:"Confirm Action"}
       </DialogTitle>
       <DialogContent>
         <p className="text-gray-700">{message}</p>

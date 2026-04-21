@@ -1,31 +1,41 @@
 import Breadcrumb from "../../../../components/breadcrumb";
 import { useUserDetailsHelper } from "./user.details.helper";
 
-
 const UserDetails = () => {
-  const imagePrefix = import.meta.env.imagePrefix;
-
-    const {details,breadcrumbs} = useUserDetailsHelper()
-
+  const VITE_IMAGE_PREFIX = import.meta.env.VITE_IMAGE_PREFIX;
+  console.log(VITE_IMAGE_PREFIX,'iiiiii');
+  
+  const { details, breadcrumbs, onStatusUpdate } = useUserDetailsHelper();
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-6 relative">
-
-    <div className="breadcrumb">
-      <Breadcrumb breadCrumbs={breadcrumbs}></Breadcrumb>
-    </div>
+      <div className="breadcrumb">
+        <Breadcrumb breadCrumbs={breadcrumbs}></Breadcrumb>
+      </div>
 
       {/* Status Badge */}
       <div className="absolute top-4 right-4">
-        <span className="px-4 py-1 rounded-full bg-green-100 text-green-600 text-sm font-medium">
-          {details?.status}
-        </span>
+        <button
+          onClick={() => details && onStatusUpdate(details)}
+          className={`px-4 py-1 rounded-full text-sm font-medium cursor-pointer transition-all
+      ${
+        details?.status === "ACTIVE"
+          ? "bg-green-100 text-green-600 hover:bg-green-200"
+          : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+      }`}
+        >
+          {details?.status === "ACTIVE" ? "Active" : "Inactive"}
+        </button>
       </div>
 
       {/* Profile Section */}
       <div className="flex items-center gap-6 mb-6">
         <img
-          src={details&&details?.profilePicture?imagePrefix+details?.profilePicture:''}
+          src={
+            details && details?.profilePicture
+              ? VITE_IMAGE_PREFIX + details?.profilePicture
+              : ""
+          }
           alt="profile"
           className="w-28 h-28 rounded-full object-cover"
         />

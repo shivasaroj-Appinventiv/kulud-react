@@ -8,7 +8,12 @@ import { useEffect, useState } from "react";
 import type { PaginatedQuery } from "../../../../interfaces/api.interface";
 import { DEFAULT_PAGE_OPTIONS } from "../../../../internal/api.constant";
 import { useNavigate } from "react-router-dom";
-import { getUsersList, updateUserStatus } from "../user.slice";
+import {
+  getUsersList,
+  resetParams,
+  setParams,
+  updateUserStatus,
+} from "../user.slice";
 import { ROUTES } from "../../../../routes/RouteConstant";
 import type { BreadCrumbType } from "../../../../components/breadcrumb/breadcrumb.helper";
 import type { User } from "../user-management.interfaces";
@@ -37,14 +42,21 @@ export const useUserListHelper = () => {
     data = { ...data, ...data.filters };
     delete data.filters;
     setPageOptions(data);
+    dispatch(setParams(data));
   };
 
   useEffect(() => {
     dispatch(getUsersList(pageOptions));
+    return () => {
+      dispatch(resetParams({}));
+    };
   }, [dispatch, pageOptions]);
 
-  const { usersList, status, totalDocs } = useAppSelector(
+  const { usersLists, status, totalDocs } = useAppSelector(
     (state: RootState) => state.userManagement,
+  );
+  const params = useAppSelector(
+    (state: RootState) => state.userManagement.params,
   );
   const isLoading = status === "loading";
 
@@ -76,12 +88,9 @@ export const useUserListHelper = () => {
   const [isFilterApplied, setIsFilterApplied] = useState(false);
 
   const updateStatus = async (data: { userId: string; type: string }) => {
+    dispatch(setParams(pageOptions));
     const res = await dispatch(updateUserStatus(data)).unwrap();
-    console.log(res);
-
-    // if (res.data.status) {
-    //   navigate("/login");
-    // }
+    dispatch(getUsersList(pageOptions));
   };
   const onStatusUpdate = (userData: User) => {
     const type =
@@ -115,7 +124,7 @@ export const useUserListHelper = () => {
   };
   return {
     handlePageOptionsChanged,
-    usersList,
+    usersLists,
     pageOptions,
     status,
     totalDocs,

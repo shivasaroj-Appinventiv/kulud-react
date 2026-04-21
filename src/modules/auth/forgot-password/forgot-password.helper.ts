@@ -20,13 +20,9 @@ const useForgotPasswordHelper = () => {
       return;
     }
     setError("");
-    console.log("Forgot password submitted for email:", email);
-    // const payload= {
-    //     email,
-    // }
+    
     try {
         const response= await dispatch(forgotPassword({email})).unwrap();
-        console.log(response);
         localStorage.setItem("email",email);
         localStorage.setItem("userId",response);
         navigate(ROUTES.VERIFY_OTP);        

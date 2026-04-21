@@ -3,6 +3,7 @@ import type { RootState } from "../store";
 
 interface Confirmation {
   open: boolean;
+  title:string,
   message: string;
   onConfirm: null | (() => void);
 }
@@ -16,6 +17,7 @@ const initialState: GlobalState = {
   loading: false,
   openConfirmationDialog: {
     open: false,
+    title:"",
     message: "",
     onConfirm: null,
   },
@@ -31,11 +33,13 @@ const globalSlice = createSlice({
     openDialog: (state, action: PayloadAction<Confirmation>) => {
       state.openConfirmationDialog.open = true;
       state.openConfirmationDialog.message = action.payload.message;
+      state.openConfirmationDialog.title = action.payload.title;
       state.openConfirmationDialog.onConfirm = action.payload.onConfirm;
     },
     closeDialog: (state) => {
       state.openConfirmationDialog.open = false;
       state.openConfirmationDialog.message = "";
+      state.openConfirmationDialog.title= "";
       state.openConfirmationDialog.onConfirm = null;
     },
   },

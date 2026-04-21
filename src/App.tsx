@@ -8,9 +8,10 @@ import { useDispatch } from "react-redux";
 import { closeDialog } from "./redux/slices/global.slice";
 
 function App() {
-  const { open, message, onConfirm } = useAppSelector(
+  const { open, message,title, onConfirm } = useAppSelector(
     (state) => state.global.openConfirmationDialog,
   );
+  
   const dispatch = useDispatch<AppDispatch>();
   return (
     <>
@@ -18,6 +19,7 @@ function App() {
       {open && (
         <ConfirmationDialog
           message={message}
+          title={title||"Confirm Action?"}
           onConfirm={() => (onConfirm?.(), dispatch(closeDialog()))}
           onCancel={() => dispatch(closeDialog())}
         />

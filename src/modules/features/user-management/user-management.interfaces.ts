@@ -1,7 +1,8 @@
 import type { ApiState } from "../../../interfaces/api.interface";
 
 export interface UserManagementSlice {
-  usersList: Array<User>;
+  usersLists: Array<User>;
+  params:any,
   status: ApiState;
   error: string | null;
   totalDocs: number;

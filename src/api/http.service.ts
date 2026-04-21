@@ -4,7 +4,7 @@ import { toastService } from "../utils/toast.service";
 import store from "../redux/store";
 
 class Http {
-  private unAuthorizedStatusCodes = [401, 403,404];
+  private unAuthorizedStatusCodes = [401, 403, 404];
 
   private API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -20,27 +20,23 @@ class Http {
       timeout: 30000,
     });
 
-
-
-    this.axios.interceptors.request.use(
-       (config: any) => {
-        const token = localStorage.getItem("token");
-        if(config.header){
-          config.header["api_key"] = "1234";
-          config.header["deviceId"] = deviceDetail(1);
-          config.header["timezone"] = deviceDetail();
-          config.header["deviceType"] = "Web";
-          config.header["accept-language"] = "en";
-        }
-        if (token) {
-          config.headers["authorization"] = `Bearer ${token}`;
-        } else {
-          config.headers["authorization"] =
-            "Basic " + btoa("kulud" + ":" + "kulud@123");
-        }
-        return config;
-      },
-    );
+    this.axios.interceptors.request.use((config: any) => {
+      const token = localStorage.getItem("token");
+      if (config.headers) {
+        config.headers["api_key"] = "1234";
+        config.headers["deviceId"] = deviceDetail(1);
+        config.headers["timezone"] = deviceDetail();
+        config.headers["deviceType"] = "Web";
+        config.headers["accept-language"] = "en";
+      }
+      if (token) {
+        config.headers["authorization"] = `Bearer ${token}`;
+      } else {
+        config.headers["authorization"] =
+          "Basic " + btoa("kulud" + ":" + "kulud@123");
+      }
+      return config;
+    });
 
     this.axios.interceptors.response.use(
       (response) => {
@@ -48,28 +44,26 @@ class Http {
       },
       (error) => {
         errorHandler(error);
+        return Promise.reject(error);
       },
     );
 
     const errorHandler = (
       error: AxiosError<{ message: string; status: number }>,
     ) => {
-      console.log(error.response, "**8");
       if (error && error.response) {
         const { message } = error.response.data;
-        const {status}=error.response;
-        // window.location.href='/login';
+        const { status } = error.response;
+
         if (this.unAuthorizedStatusCodes.includes(status)) {
-          localStorage.removeItem("token");
-          store.dispatch({ type: "logout/LOGOUT" });
-        } else {
-          console.error(message);
+          // localStorage.removeItem("token");
+          // store.dispatch({ type: "logout/LOGOUT" });
         }
+
         toastService.showToast(message);
-        return error;
-      } else {
-        return error;
+        // ✅ no return value needed — just side effects
       }
+      // ✅ no return here either
     };
   }
 

@@ -1,5 +1,5 @@
 const adminService= "admin/api/v1";
-const SUB_ADMINS ="sub-admin";
+const SUB_ADMINS ="sub-admins";
 const endPoints = {
   //Admin endPoints
   logInAdmin: "admin/api/v1/login",

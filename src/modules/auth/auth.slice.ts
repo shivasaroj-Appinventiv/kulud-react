@@ -38,15 +38,12 @@ export const authSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
-      console.log("FULFILLED HIT", action.payload);
       
       // state.admin = { ...state.admin, ...action.payload };
     });
     builder.addCase(login.rejected, (state, action) => {
-      console.log("REJECTED HIT", action.payload);
     });
     builder.addCase(getProfileDetails.fulfilled, (state, action) => {
-console.log(action.payload );
 
       state.admin = { ...action.payload };
     });
@@ -70,12 +67,10 @@ export const login = createAsyncThunk(
         endPoints.login,
         payloadToSend,
       );
-      console.log(response);
 
       toastService.showToast("You logged in successfully", "success");
       return response;
     } catch (error) {
-      console.log(error,'****************');
       
       return thunkAPI.rejectWithValue(error);
     } finally {
@@ -113,7 +108,6 @@ export const verifyOTP = createAsyncThunk(
         endPoints.VERIFY_OTP_FROM_PROFILE_API,
         payload,
       );
-      console.log(response);
       
       const { message, data } = response.data;
       toastService.showToast(message, "success");
@@ -176,7 +170,6 @@ export const getProfileDetails = createAsyncThunk(
         endPoints.getUserDetails
       );
 
-      console.log("FULL RESPONSE:", response);
 
       return response.data.data; // ✅ FIXED
 

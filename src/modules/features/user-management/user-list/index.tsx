@@ -5,9 +5,11 @@ import UserFilter from "../user-filter";
 import React, { useState } from "react";
 import { Button, Menu, MenuItem } from "@mui/material";
 import { EllipsisVertical, EllipsisVerticalIcon } from "lucide-react";
+import { STATUS_TYPE_VALUE } from "../../../../constants/constant";
+import RowActionMenu from "./RowActionMenu";
 const userList = () => {
   const {
-    usersList,
+    usersLists,
     totalDocs,
     pageOptions,
     handlePageOptionsChanged,
@@ -21,7 +23,7 @@ const userList = () => {
     isFilterApplied,
     filters,
     isLoading,
-    onStatusUpdate
+    onStatusUpdate,
   } = useUserListHelper();
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleString("en-IN", {
@@ -67,7 +69,7 @@ const userList = () => {
       accessor: "status",
       render: (row: any) => (
         <span
-          className={`${row.status == "ACTIVE" ? "text-green-600" : "text-gray-600 bg-gray-100"}`}
+          className={`${row.status == "ACTIVE" ? "text-green-600" : "text-red-600 bg-red-100"}`}
         >
           {row.status}
         </span>
@@ -77,34 +79,12 @@ const userList = () => {
       header: "Actions",
       accessor: "",
       render: (row: any) => (
-        <div>
-          <Button
-            id="basic-button"
-            aria-controls={open ? "basic-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
-          >
-            <EllipsisVertical />
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            slotProps={{
-              list: {
-                "aria-labelledby": "basic-button",
-              },
-            }}
-          >
-            <MenuItem onClick={()=>onDetails(row)}>Details</MenuItem>
-            <MenuItem onClick={onEdit}>Edit</MenuItem>
-            <MenuItem onClick={() => onStatusUpdate(row)}>
-              {row.status == "ACTIVE" ? "Deactivate" : "Activate"}
-            </MenuItem>
-          </Menu>
-        </div>
+        <RowActionMenu
+          row={row}
+          onDetails={onDetails}
+          onEdit={onEdit}
+          onStatusUpdate={onStatusUpdate}
+        />
       ),
     },
   ];
@@ -117,7 +97,7 @@ const userList = () => {
         loading={isLoading}
         columns={columns}
         totalDocs={totalDocs}
-        data={usersList}
+        data={usersLists}
         pageSize={10}
         pageOptions={pageOptions}
         handlePageOptionsChanged={handlePageOptionsChanged}

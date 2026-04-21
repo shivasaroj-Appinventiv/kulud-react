@@ -7,7 +7,7 @@ import { getProfileDetails } from "../modules/auth/auth.slice";
 import { useEffect } from "react";
 
 const Sidebar = () => {
-   const imagePrefix = import.meta.env.imagePrefix;
+   const VITE_IMAGE_PREFIX = import.meta.env.VITE_IMAGE_PREFIX;
   const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: ROUTES.DASHBOARD },
     { icon: Building, label: "Organizations", path: ROUTES.ORGANIZATIONS },
@@ -60,7 +60,7 @@ const Sidebar = () => {
             <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
               {userData?.profilePicture ? (
                 <img
-                  src={+imagePrefix+ userData?.profilePicture}
+                  src={VITE_IMAGE_PREFIX+ userData?.profilePicture}
                   alt="user image"
                   className="w-10 rounded-full"
                 />

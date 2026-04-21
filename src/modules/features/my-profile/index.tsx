@@ -2,7 +2,7 @@ import useMyProfileHelper from "./profile.helper";
 
 const MyProfile = ()=>{
         const {userData}= useMyProfileHelper();
-   const imagePrefix = import.meta.env.imagePrefix;
+   const VITE_IMAGE_PREFIX = import.meta.env.VITE_IMAGE_PREFIX;
 
        return (
         <div className="w-full p-6 bg-white shadow-md rounded-md mt-6">
@@ -11,7 +11,7 @@ const MyProfile = ()=>{
             <div className="flex item-space-between gap-6 mb-6">
                 <div className="w-32 h-32">
 
-                <img src={imagePrefix+userData?.profilePicture||''} alt="user image" className="w-32 h-32 rounded-full border-2 border-gray-300" />
+                <img src={VITE_IMAGE_PREFIX+userData?.profilePicture||''} alt="user image" className="w-32 h-32 rounded-full border-2 border-gray-300" />
                 </div>
                 <button className="">Edit</button>
             </div>
