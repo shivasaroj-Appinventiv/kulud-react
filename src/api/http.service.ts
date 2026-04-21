@@ -56,8 +56,8 @@ class Http {
         const { status } = error.response;
 
         if (this.unAuthorizedStatusCodes.includes(status)) {
-          // localStorage.removeItem("token");
-          // store.dispatch({ type: "logout/LOGOUT" });
+          localStorage.removeItem("token");
+          store.dispatch({ type: "logout/LOGOUT" });
         }
 
         toastService.showToast(message);

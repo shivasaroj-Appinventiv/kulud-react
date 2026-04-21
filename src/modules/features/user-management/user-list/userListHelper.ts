@@ -4,7 +4,7 @@ import {
   type AppDispatch,
   type RootState,
 } from "../../../../redux/store";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { PaginatedQuery } from "../../../../interfaces/api.interface";
 import { DEFAULT_PAGE_OPTIONS } from "../../../../internal/api.constant";
 import { useNavigate } from "react-router-dom";
@@ -38,12 +38,12 @@ export const useUserListHelper = () => {
     navigate(ROUTES.GET_USER_DETAILS(row.id));
   };
 
-  const handlePageOptionsChanged = (data: PaginatedQuery) => {
-    data = { ...data, ...data.filters };
-    delete data.filters;
-    setPageOptions(data);
-    dispatch(setParams(data));
-  };
+  // const handlePageOptionsChanged = (data: PaginatedQuery) => {
+  //   data = { ...data, ...data.filters };
+  //   delete data.filters;
+  //   setPageOptions(data);
+  //   dispatch(setParams(data));
+  // };
 
   useEffect(() => {
     dispatch(getUsersList(pageOptions));
@@ -68,17 +68,17 @@ export const useUserListHelper = () => {
 
   const [showFilter, setShowFilter] = useState(false);
 
-  const handleApplyFilter = (values: any) => {
-    setFilters(values);
+  // const handleApplyFilter = (values: any) => {
+  //   setFilters(values);
 
-    handlePageOptionsChanged({
-      ...pageOptions,
-      page: 1,
-      filters: { ...values, status: values.status.join(",") },
-    });
-    setIsFilterApplied(true);
-    setShowFilter(false);
-  };
+  //   handlePageOptionsChanged({
+  //     ...pageOptions,
+  //     page: 1,
+  //     filters: { ...values, status: values.status.join(",") },
+  //   });
+  //   setIsFilterApplied(true);
+  //   setShowFilter(false);
+  // };
   const handleCloseFilter = () => {
     setShowFilter(false);
   };
@@ -123,6 +123,37 @@ export const useUserListHelper = () => {
       }),
     );
   };
+
+
+  const pageOptionsRef = useRef<PaginatedQuery>(pageOptions);
+
+useEffect(() => {
+  pageOptionsRef.current = pageOptions;
+}, [pageOptions]);
+
+const handlePageOptionsChanged = (data: PaginatedQuery) => {
+  const { filters, ...rest } = data;
+  const merged = filters ? { ...rest, ...filters } : rest;
+  pageOptionsRef.current = merged;   // sync ref immediately
+  setPageOptions(merged);
+};
+
+const handleApplyFilter = (values: any) => {
+  setFilters(values);
+
+  const isEmpty =
+    values.status.length === 0 && !values.createdFrom && !values.createdTo;
+
+  setIsFilterApplied(!isEmpty); // ✅ correctly tracks filter state
+
+  handlePageOptionsChanged({
+    ...pageOptionsRef.current,   // ✅ never stale
+    page: 1,
+    filters: { ...values, status: values.status.join(",") },
+  });
+
+  setShowFilter(false);
+};
   return {
     handlePageOptionsChanged,
     usersLists,

@@ -14,6 +14,8 @@ import { openDialog } from "../../../../redux/slices/global.slice";
 export const useUserDetailsHelper = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { id } = useParams();
+
+  
   const breadcrumbs: BreadCrumbType[] = [
     { title: "User Management", path: ROUTES.USER_MANAGEMENT },
     { title: "User Details", path: ROUTES.USER_MANAGEMENT },

@@ -1,10 +1,9 @@
+import { Avatar } from "@mui/material";
 import Breadcrumb from "../../../../components/breadcrumb";
 import { useUserDetailsHelper } from "./user.details.helper";
 
 const UserDetails = () => {
-  const VITE_IMAGE_PREFIX = import.meta.env.VITE_IMAGE_PREFIX;
-  console.log(VITE_IMAGE_PREFIX,'iiiiii');
-  
+  const VITE_IMAGE_PREFIX = import.meta.env.VITE_IMAGE_PREFIX;  
   const { details, breadcrumbs, onStatusUpdate } = useUserDetailsHelper();
 
   return (
@@ -21,7 +20,7 @@ const UserDetails = () => {
       ${
         details?.status === "ACTIVE"
           ? "bg-green-100 text-green-600 hover:bg-green-200"
-          : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+          : "bg-red-200 text-red-600 hover:bg-red-300"
       }`}
         >
           {details?.status === "ACTIVE" ? "Active" : "Inactive"}
@@ -30,6 +29,7 @@ const UserDetails = () => {
 
       {/* Profile Section */}
       <div className="flex items-center gap-6 mb-6">
+        {details?.profilePicture?
         <img
           src={
             details && details?.profilePicture
@@ -39,6 +39,10 @@ const UserDetails = () => {
           alt="profile"
           className="w-28 h-28 rounded-full object-cover"
         />
+        :
+        <Avatar sx={{ width: 120, height: 120 }} />
+
+      }
       </div>
 
       {/* Details Grid */}

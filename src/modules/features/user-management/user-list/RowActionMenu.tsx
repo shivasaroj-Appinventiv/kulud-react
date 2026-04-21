@@ -40,14 +40,14 @@ const RowActionMenu = ({
         >
           Details
         </MenuItem>
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             onEdit(row);
             handleClose();
           }}
         >
           Edit
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
           onClick={() => {
             onStatusUpdate(row);

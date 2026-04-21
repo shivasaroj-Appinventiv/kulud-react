@@ -154,7 +154,7 @@ const CommonTableComponent = <T,>({
               //       </tr>
 
               <>
-                {Array(5)
+                {Array(10)
                   .fill(0)
                   .map((_, index) => (
                     <tr key={index}>

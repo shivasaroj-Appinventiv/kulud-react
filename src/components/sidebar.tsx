@@ -25,8 +25,8 @@ const Sidebar = () => {
   return (
     <div className="bg-white h-full shadow-lg flex flex-col">
       {/* Logo */}
-      <div className="px-5 py-5 border-b border-gray-200">
-        <h1 className="text-2xl font-bold text-blue-600">MYLZ</h1>
+      <div className="px-5 py-[16px] border-b border-gray-200 shadow-sm">
+        <h1 className="text-xl font-bold text-blue-600">MYLZ</h1>
       </div>
 
       {/* Navigation */}

@@ -52,13 +52,22 @@ const UserFilter = ({
     formik.setFieldValue("status", updated);
   };
 
+  // const handleFilterReset = () => {
+  //   formik.resetForm();
+  //   onClose();
+  //   if(isApplied){
+  //       onApply({status:[],createdFrom:null,createdTo:null});
+  //   }
+  // };
+
   const handleFilterReset = () => {
-    formik.resetForm();
-    onClose();
-    if(isApplied){
-        onApply({status:[],createdFrom:null,createdTo:null});
-    }
-  };
+  const empty = { status: [], createdFrom: null, createdTo: null };
+  formik.resetForm({ values: empty });
+  if (isApplied) {
+    onApply(empty); // resets pageOptions in parent first
+  }
+  onClose();       // then close
+};
 
   const activeCount =
     formik.values.status.length +

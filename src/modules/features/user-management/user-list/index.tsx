@@ -2,11 +2,9 @@ import Breadcrumb from "../../../../components/breadcrumb";
 import CommonTableComponent from "../../../../components/common-table/CommonTableComponent";
 import { useUserListHelper } from "./userListHelper";
 import UserFilter from "../user-filter";
-import React, { useState } from "react";
-import { Button, Menu, MenuItem } from "@mui/material";
-import { EllipsisVertical, EllipsisVerticalIcon } from "lucide-react";
-import { STATUS_TYPE_VALUE } from "../../../../constants/constant";
+import React from "react";
 import RowActionMenu from "./RowActionMenu";
+import { Chip } from "@mui/material";
 const userList = () => {
   const {
     usersLists,
@@ -33,14 +31,7 @@ const userList = () => {
       hour: "2-digit",
       minute: "2-digit",
     });
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
   const columns = [
     {
       header: "User Id",
@@ -68,11 +59,21 @@ const userList = () => {
       header: "Status",
       accessor: "status",
       render: (row: any) => (
-        <span
-          className={`${row.status == "ACTIVE" ? "text-green-600" : "text-red-600 bg-red-100"}`}
-        >
-          {row.status}
-        </span>
+
+        <Chip
+            label={row?.status === "ACTIVE" ? "Active" : "Inactive"}
+            sx={{
+              width:100,
+                backgroundColor:
+                row?.status === "ACTIVE" ? "#cfe3d9" : "#f1aaaa",
+                color: row?.status === "ACTIVE" ? "green" : "red",
+                fontWeight: "bold",
+                borderRadius: "20px",
+                px: 1.5,
+            }}
+        />
+
+         
       ),
     },
     {
@@ -103,6 +104,8 @@ const userList = () => {
         handlePageOptionsChanged={handlePageOptionsChanged}
         onRowClick={(row) => {}}
         onToggleFilter={handleToggleFilter}
+        isFilterApplied={isFilterApplied}
+
       >
         {showFilter && (
           <UserFilter
