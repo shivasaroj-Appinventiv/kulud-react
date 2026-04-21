@@ -119,6 +119,7 @@ export const useUserListHelper = () => {
         onConfirm: () => {
           void updateStatus({ userId, type });
         },
+        title: ""
       }),
     );
   };

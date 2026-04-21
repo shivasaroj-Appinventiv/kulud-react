@@ -1,12 +1,17 @@
+import Breadcrumb from "../../../components/breadcrumb";
 import useMyProfileHelper from "./profile.helper";
 
 const MyProfile = ()=>{
-        const {userData}= useMyProfileHelper();
+        const {userData,breadcrumbs}= useMyProfileHelper();
    const VITE_IMAGE_PREFIX = import.meta.env.VITE_IMAGE_PREFIX;
 
        return (
         <div className="w-full p-6 bg-white shadow-md rounded-md mt-6">
-            <h2 className="text-2xl font-semi-bold mb-4">My Profile</h2>
+            <h2 className="text-2xl font-semi-bold mb-1">My Profile</h2>
+
+             <div className="breadcrumb">
+        <Breadcrumb breadCrumbs={breadcrumbs}></Breadcrumb>
+      </div>
 
             <div className="flex item-space-between gap-6 mb-6">
                 <div className="w-32 h-32">

@@ -6,7 +6,26 @@ import { useAppSelector, type AppDispatch } from "./redux/store";
 import ConfirmationDialog from "./components/ConfirmationDialog";
 import { useDispatch } from "react-redux";
 import { closeDialog } from "./redux/slices/global.slice";
+import {
+  Chart as ChartJS,
+  ArcElement,   // ✅ REQUIRED for Pie
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+} from "chart.js";
 
+ChartJS.register(
+  ArcElement,   // ✅ add this
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 function App() {
   const { open, message,title, onConfirm } = useAppSelector(
     (state) => state.global.openConfirmationDialog,

@@ -4,7 +4,7 @@ import { useAppSelector, type AppDispatch } from "../redux/store";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../modules/auth/auth.slice";
-import { ChevronDown, Menu as MenuIcon, User, X } from "lucide-react";
+import { ChevronDown, LogOut, Menu as MenuIcon, User, X } from "lucide-react";
 import { openDialog } from "../redux/slices/global.slice";
 import { MenuItem, Menu } from "@mui/material";
 import { ROUTES } from "../routes/RouteConstant";
@@ -51,6 +51,7 @@ const DashboardLayout = ({ children, name }: DashboardLayoutProps) => {
         open: true,
         message: "Are you sure you want to logout?",
         onConfirm: handleLogout,
+        title: ""
       })
     );
   };
@@ -126,9 +127,17 @@ const DashboardLayout = ({ children, name }: DashboardLayoutProps) => {
             vertical: "top",
             horizontal: "right",
           }}
+           slotProps={{
+                                paper: {
+                                    sx: {
+                                        width: 150, // ✅ correct way in MUI v6+
+                                    },
+                                },
+                            }}
+
         >
-          <MenuItem onClick={navigateToProfile}>Profile</MenuItem>
-          <MenuItem onClick={onLogoutClick}>Logout</MenuItem>
+          <MenuItem className="flex align-center gap-4 "   onClick={navigateToProfile}>Profile <User />  </MenuItem>
+          <MenuItem className="flex align-center gap-4 " onClick={onLogoutClick}>Logout  <LogOut /> </MenuItem>
         </Menu>
 
         {/* Content */}
