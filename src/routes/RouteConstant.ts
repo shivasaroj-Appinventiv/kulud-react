@@ -12,6 +12,7 @@ export const ROUTES = {
 
   // Absolute — for navigate() and <Link to>
   USER_MANAGEMENT: "/users",
+  ROLES_AND_PERMISSIONS: "/roles-and-permissions",
   GET_USER_DETAILS: (id: string) => `/users/${id}`,
   ORGANIZATIONS: "/organizations",
   GET_ORGANIZATION_DETAILS: (id: string) => `/organizations/${id}`,
@@ -26,6 +27,7 @@ export const PAGE_HEADINGS = {
   ORGANIZATION: "ORGANIZATION",
   ORGANIZATION_DETAILS: "ORGANIZATION DETAILS",
   EDIT_ORGANIZATION_DETAILS: "Edit Organization Details",
+  ROLES_AND_PERMISSIONS:"Roles & Permissions",
   LOGIN: "Login",
   PROFILE: "Profile",
   FORGOT_PASSWORD: "Forgot Password",
@@ -35,5 +37,6 @@ export const PAGE_HEADINGS = {
   CONTENT: "Content",
   VERIFY_OTP: "verify-otp",
   USER_MANAGEMENT: "USER MANAGEMENT",
+  CMS_MANAGEMENT: "CMS MANAGEMENT",
   USER_DETAILS: "USER DETAILS",
 };

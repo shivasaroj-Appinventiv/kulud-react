@@ -12,7 +12,7 @@ const VerifyOTP = lazy(() => import("@auth/verify-otp"));
 const ResetPassword = lazy(() => import("@auth/reset-password"));
 //Profile
 
-const Profile = lazy(()=>import("@features/my-profile"))
+const Profile = lazy(() => import("@features/my-profile"));
 // Dashboard
 const Dashboard = lazy(() => import("@features/Dashboard"));
 
@@ -21,7 +21,10 @@ const UserList = lazy(() => import("@features/user-management/user-list"));
 const UserDetails = lazy(
   () => import("@features/user-management/user-details"),
 );
-
+//Permissions
+const RolesAndPermission = lazy(
+  () => import("@/modules/features/roles-and-permissions/list"),
+);
 // CMS
 const CMS = lazy(() => import("@features/cms"));
 const About = lazy(() => import("@features/cms/components/about-us"));
@@ -75,6 +78,12 @@ export const APP_ROUTES: AppRoute[] = [
     Layout: DashboardLayout,
     isPrivate: true,
     element: <UserList />,
+  },
+  {
+    path: ROUTES.ROLES_AND_PERMISSIONS,
+    Layout: DashboardLayout,
+    isPrivate: true,
+    element: <RolesAndPermission />,
   },
   {
     path: ROUTES.GET_USER_DETAILS(":id"), // "/users/:id"
