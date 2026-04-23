@@ -22,8 +22,10 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
    "paths": {
+      "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
-      "@features/*": ["src/features/*"]
+      "@features/*": ["src/modules/features/*"],
+      "@auth/*":["src/modules/auth/*"]
     }
   },
   "include": ["src"]

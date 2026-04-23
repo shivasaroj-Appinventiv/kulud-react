@@ -1,5 +1,8 @@
 const adminService= "admin/api/v1";
 const SUB_ADMINS ="sub-admins";
+const VERSION = 'v1';
+const API = 'api';
+const CMS ="cms";
 const endPoints = {
   //Admin endPoints
   logInAdmin: "admin/api/v1/login",
@@ -20,6 +23,9 @@ const endPoints = {
   organizationList:'user/api/v1/organization/panel-organization-list',
   get_organization_details: 'user/api/v1/organization/get-organization-detail',
   update_organization_details: 'user/api/v1/organization/update-organization',
+
+  //CMS
+  APPLICATION_CMS : `${CMS}/${API}/${VERSION}/application-terms`,
 
 
   userList:`${adminService}/sub-admins`,

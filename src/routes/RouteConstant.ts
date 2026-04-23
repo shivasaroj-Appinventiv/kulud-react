@@ -1,20 +1,22 @@
 export const ROUTES = {
+  // Auth — absolute
   LOGIN: "/login",
-  PROFILE: "/profile",
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
   VERIFY_OTP: "/verify-otp",
   SIGNUP: "/signup",
+
+  // Dashboard
   DASHBOARD: "/",
+  PROFILE: "/profile",
+
+  // Absolute — for navigate() and <Link to>
   USER_MANAGEMENT: "/users",
   GET_USER_DETAILS: (id: string) => `/users/${id}`,
-  USER_DETAILS_: "/users/:id",
   ORGANIZATIONS: "/organizations",
-  EDIT_ORGANIZATIONS_DETAILS: "/organizations/edit/:id",
-  EDIT_ORGANIZATION_DETAILS: (id: string) => `/organizations/edit/${id}`,
-  ORGANIZATIONS_DETAILS: "/organizations/:id",
-
   GET_ORGANIZATION_DETAILS: (id: string) => `/organizations/${id}`,
+  EDIT_ORGANIZATION_DETAILS: (id: string) => `/organizations/edit/${id}`,
+  CMS: "/cms",
 };
 
 export const PAGE_HEADINGS = {
@@ -32,7 +34,6 @@ export const PAGE_HEADINGS = {
   SIGNUP: "Sign up",
   CONTENT: "Content",
   VERIFY_OTP: "verify-otp",
-
   USER_MANAGEMENT: "USER MANAGEMENT",
   USER_DETAILS: "USER DETAILS",
 };

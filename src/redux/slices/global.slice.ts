@@ -1,17 +1,8 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
+import type { Confirmation, GlobalState } from "../global.interface";
 
-interface Confirmation {
-  open: boolean;
-  title:string,
-  message: string;
-  onConfirm: null | (() => void);
-}
 
-type GlobalState = {
-  loading: boolean;
-  openConfirmationDialog: Confirmation;
-};
 
 const initialState: GlobalState = {
   loading: false,

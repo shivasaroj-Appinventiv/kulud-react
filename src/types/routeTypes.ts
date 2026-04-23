@@ -1,16 +1,21 @@
 import type { ReactNode } from "react";
 
-export interface Route {
-  name: string;
+export interface AppRoute {
   path: string;
-  id: number;
-  isPrivate: boolean;
-  component: ReactNode | any;
-  Layout?: React.FC<{ children: ReactNode }>;
-  hideAfterLogin?: boolean;
-  pageProp?: { page: string };
-}
+  element?: ReactNode;
+  children?: AppRoute[];
+  hideAfterLogin?:boolean
+  // Guards
+  isPrivate?: boolean;
+  roles?: string[];
+  permissions?: string[];
 
+  // Layout
+  Layout?: React.ComponentType<any>;
+
+  // Optional meta
+  name?: string;
+}
 
 export type CustomRouteProps = {
   children: React.ReactNode;

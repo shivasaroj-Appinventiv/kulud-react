@@ -7,10 +7,9 @@ const UserDetails = () => {
   const { details, breadcrumbs, onStatusUpdate } = useUserDetailsHelper();
 
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6 relative">
-      <div className="breadcrumb">
+    <>
         <Breadcrumb breadCrumbs={breadcrumbs}></Breadcrumb>
-      </div>
+    <div className="bg-white rounded-2xl shadow-md p-6 relative">
 
       {/* Status Badge */}
       <div className="absolute top-4 right-4">
@@ -84,6 +83,7 @@ const UserDetails = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

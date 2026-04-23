@@ -1,14 +1,11 @@
-    
-    interface AuthLayoutProps{
-        children:React.ReactNode
-    }
-    
-    const AuthLayout=({children}:AuthLayoutProps)=>{
-        return(
-            // <div className="bg-gray-100 h-screen">
-            // {children}
-            // </div>
-              <div className="min-h-screen flex">
+interface AuthLayoutProps {
+  children: React.ReactNode;
+}
+
+const AuthLayout = ({ children }: AuthLayoutProps) => {
+  return (
+
+    <div className="min-h-screen flex">
       {/* Left side - Form */}
       <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-20 xl:px-24 bg-white">
         <div className="w-full max-w-md space-y-8">
@@ -18,7 +15,7 @@
           {children}
         </div>
       </div>
-      
+
       {/* Right side - Image */}
       <div className="hidden lg:block relative w-0 flex-1">
         <img
@@ -29,7 +26,7 @@
         <div className="absolute inset-0 bg-blue-900 bg-opacity-20"></div>
       </div>
     </div>
-        );
-    }
+  );
+};
 
-    export default AuthLayout;
+export default AuthLayout;

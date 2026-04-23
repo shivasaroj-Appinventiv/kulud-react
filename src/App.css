@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+/* Fix toolbar */
+.quill-custom .ql-toolbar {
+  @apply border-0 border-b border-gray-200 bg-gray-50 rounded-t-xl;
+}
+
+/* Fix editor container */
+.quill-custom .ql-container {
+  @apply border-0 rounded-b-xl text-gray-800;
+}
+
+/* Fix editor content */
+.quill-custom .ql-editor {
+  @apply min-h-[180px] text-sm leading-relaxed;
+}
+
+/* Placeholder */
+.quill-custom .ql-editor.ql-blank::before {
+  @apply text-gray-400 not-italic;
+}

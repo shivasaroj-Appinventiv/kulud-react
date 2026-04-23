@@ -15,7 +15,7 @@ import {
   Tooltip,
   Legend
 } from "chart.js";
-import Loader from "@components/loader";
+import Loader from "./components/loader";
 
 ChartJS.register(
   ArcElement,   // ✅ add this

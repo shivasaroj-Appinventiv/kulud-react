@@ -9,8 +9,10 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      "@components": path.resolve(__dirname, "src/components"),
-      "@features": path.resolve(__dirname, "src/features"),
+      "@": path.resolve(__dirname, "./src"),
+      "@components": path.resolve(__dirname, "src/modules/components"),
+      "@features": path.resolve(__dirname, "src/modules/features"),
+      "@auth":path.resolve(__dirname,"src/modules/auth")
     },
   },
 });

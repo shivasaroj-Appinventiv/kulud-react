@@ -119,41 +119,40 @@ export const useUserListHelper = () => {
         onConfirm: () => {
           void updateStatus({ userId, type });
         },
-        title: ""
+        title: "",
       }),
     );
   };
 
-
   const pageOptionsRef = useRef<PaginatedQuery>(pageOptions);
 
-useEffect(() => {
-  pageOptionsRef.current = pageOptions;
-}, [pageOptions]);
+  useEffect(() => {
+    pageOptionsRef.current = pageOptions;
+  }, [pageOptions]);
 
-const handlePageOptionsChanged = (data: PaginatedQuery) => {
-  const { filters, ...rest } = data;
-  const merged = filters ? { ...rest, ...filters } : rest;
-  pageOptionsRef.current = merged;   // sync ref immediately
-  setPageOptions(merged);
-};
+  const handlePageOptionsChanged = (data: PaginatedQuery) => {
+    const { filters, ...rest } = data;
+    const merged = filters ? { ...rest, ...filters } : rest;
+    pageOptionsRef.current = merged; // sync ref immediately
+    setPageOptions(merged);
+  };
 
-const handleApplyFilter = (values: any) => {
-  setFilters(values);
+  const handleApplyFilter = (values: any) => {
+    setFilters(values);
 
-  const isEmpty =
-    values.status.length === 0 && !values.createdFrom && !values.createdTo;
+    const isEmpty =
+      values.status.length === 0 && !values.createdFrom && !values.createdTo;
 
-  setIsFilterApplied(!isEmpty); // ✅ correctly tracks filter state
+    setIsFilterApplied(!isEmpty); // ✅ correctly tracks filter state
 
-  handlePageOptionsChanged({
-    ...pageOptionsRef.current,   // ✅ never stale
-    page: 1,
-    filters: { ...values, status: values.status.join(",") },
-  });
+    handlePageOptionsChanged({
+      ...pageOptionsRef.current, // ✅ never stale
+      page: 1,
+      filters: { ...values, status: values.status.join(",") },
+    });
 
-  setShowFilter(false);
-};
+    setShowFilter(false);
+  };
   return {
     handlePageOptionsChanged,
     usersLists,

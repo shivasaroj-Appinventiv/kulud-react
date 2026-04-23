@@ -6,12 +6,15 @@ import authReducer from "../../modules/auth/auth.slice";
 import organizationManagementSlice from "../../modules/features/organization-management/organization.slices";
 import { persistStore } from "redux-persist";
 import userManagementSlice from "../../modules/features//user-management/user.slice";
+import cmsSlice from "@/modules/features/cms/cms.slice";
+
 const reducers = combineReducers({
   todos: todoReducer,
   global: globalSlice,
   auth: authReducer,
   organizationManagement: organizationManagementSlice,
   userManagement: userManagementSlice,
+  cms:cmsSlice
 });
 
 const reducerProxy = (state: any, action: Action) => {
