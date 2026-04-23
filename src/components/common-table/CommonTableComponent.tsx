@@ -5,7 +5,6 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Loader2,
   ListFilterIcon,
 } from "lucide-react";
 import { useCommonTableHelper } from "./common-table.helper";

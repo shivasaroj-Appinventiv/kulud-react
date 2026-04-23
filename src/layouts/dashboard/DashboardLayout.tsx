@@ -1,4 +1,4 @@
-import Sidebar from "../../components/sidebar";
+import Sidebar from "../../components/sidebar/sidebar";
 import { ChevronDown, LogOut, Menu as MenuIcon, User, X } from "lucide-react";
 import { MenuItem, Menu } from "@mui/material";
 import Avatar from "@/components/Avatar";
