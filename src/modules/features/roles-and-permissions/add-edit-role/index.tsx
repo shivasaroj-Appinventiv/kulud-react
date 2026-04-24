@@ -14,7 +14,6 @@ import { addRole, updateRole } from "../roles-and-permissions.slice";
 import { toastService } from "@/utils/toast.service";
 import { ROUTES } from "@/routes/RouteConstant";
 import Breadcrumb from "../../../../components/breadcrumb";
-import { useEffect } from "react";
 
 export default function AddEditRole() {
   const {
@@ -27,87 +26,83 @@ export default function AddEditRole() {
     breadcrumbs,
   } = useAddEditRoleHelper();
 
-  // ✅ Selected permissions for edit mode
+  // ✅ selected permissions (edit mode)
   const selectedPermissionIds =
     roleDetails?.permissions?.map((p: any) => p.id) || [];
+
+  // ✅ transform permissions safely
+  const transformedPermissions = transformPermissions(
+    permissionsList,
+    selectedPermissionIds
+  );
+
   const roleSchema = Yup.object({
     name: Yup.string().trim().required("Role name is required"),
   });
-
-  const addEditHandler = async (values: any) => {
-    const permissionIds: string[] = [];
-    console.log(values.permissions);
-    
-    values.permissions.forEach((p: any) => {
-      if (p.view?.checked) permissionIds.push(p.view.id);
-    debugger;
-
-      if (p.edit?.checked) permissionIds.push(p.edit.id);
-    });
-
-    const payload = {
-      name: values.name,
-      permissionIds,
-    };
-
-    if (id) {
-      await dispatch(updateRole({ id: id, ...payload }));
-    } else {
-      await dispatch(addRole(payload));
-    }
-    toastService.showToast(
-      `Role has been ${id ? "added" : "updated"} successfully`,
-      "success",
-    );
-    navigate(ROUTES.ROLES_AND_PERMISSIONS);
-  };
-  useEffect(() => {
-    console.log(permissionsList, "permissionsList");
-  }, [permissionsList]);
 
   const formik = useFormik({
     enableReinitialize: true,
     validateOnMount: true,
     initialValues: {
       name: roleDetails?.name || "",
-      permissions: transformPermissions(permissionsList, selectedPermissionIds),
+      permissions: transformedPermissions,
     },
     validationSchema: roleSchema,
-    onSubmit: (values) => {
-      addEditHandler(values);
+    onSubmit: async (values) => {
+      try {
+        const permissionIds: string[] = [];
+
+        (values.permissions || []).forEach((p: any) => {
+          if (p.view?.checked) permissionIds.push(p.view.id);
+          if (p.edit?.checked) permissionIds.push(p.edit.id);
+        });
+
+        const payload = {
+          name: values.name,
+          permissionIds,
+        };
+
+        if (id) {
+          await dispatch(updateRole({ id, ...payload })).unwrap();
+        } else {
+          await dispatch(addRole(payload)).unwrap();
+        }
+
+        toastService.showToast(
+          `Role has been ${id ? "updated" : "added"} successfully`,
+          "success"
+        );
+
+        navigate(ROUTES.ROLES_AND_PERMISSIONS);
+      } catch (error) {
+        toastService.showToast("Something went wrong", "error");
+      }
     },
   });
 
-  // Select All Method
+  // ✅ Select All logic
   const handleSelectAll = (type: "view" | "edit") => {
     const allSelected = formik.values.permissions.every(
-      (p: any) => p[type]?.checked,
+      (p: any) => p[type]?.checked
     );
 
     const newVal = !allSelected;
 
     const updated = formik.values.permissions.map((p: any) => {
-      //  VIEW ALL
       if (type === "view") {
         return {
           ...p,
           view: p.view ? { ...p.view, checked: newVal } : null,
-          //  remain edit as it is
-          edit: p.edit,
+          edit: newVal ? p.edit : { ...p.edit, checked: false }, // uncheck edit if view off
         };
       }
 
-      //  EDIT ALL
       if (type === "edit") {
         return {
           ...p,
           edit: p.edit ? { ...p.edit, checked: newVal } : null,
-          // if edit ON → force view ON
           view: p.view
-            ? {
-                ...p.view,
-                checked: newVal ? true : p.view.checked,
-              }
+            ? { ...p.view, checked: newVal ? true : p.view.checked }
             : null,
         };
       }
@@ -118,6 +113,7 @@ export default function AddEditRole() {
     formik.setFieldValue("permissions", updated);
   };
 
+  // ✅ Loading state
   if (!permissionsList?.length || (id && !roleDetails)) {
     return (
       <div className="p-6">
@@ -125,19 +121,10 @@ export default function AddEditRole() {
           <Skeleton height={40} />
           <Skeleton height={1} />
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="grid grid-cols-3 items-center gap-4 mt-3">
+            <div key={i} className="grid grid-cols-3 gap-4 mt-3">
               <Skeleton height={15} width={120} />
-
-              <div className="flex justify-center">
-                {/* <Skeleton circle width={18} height={18} /> */}
-              </div>
-
-              <div className="flex justify-center">
-                {/* <Skeleton circle width={18} height={18} /> */}
-              </div>
             </div>
           ))}
-
           <div className="flex justify-center gap-4 mt-6">
             <Skeleton height={40} width={200} />
             <Skeleton height={40} width={200} />
@@ -147,61 +134,62 @@ export default function AddEditRole() {
     );
   }
 
+  // ✅ Check at least one permission selected
+  const hasPermissionSelected = formik.values.permissions.some(
+    (p: any) => p.view?.checked || p.edit?.checked
+  );
+
   return (
     <>
       <Breadcrumb breadCrumbs={breadcrumbs} />
+
       <form onSubmit={formik.handleSubmit} className="p-6">
         <Card className="shadow-md rounded-xl">
           <CardContent className="space-y-6">
-            <div>
-              <TextField
-                fullWidth
-                name="name"
-                placeholder="Enter Role Name"
-                value={formik.values.name}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.name && !!formik.errors.name}
-                helperText={
-                  formik.touched.name && typeof formik.errors.name === "string"
-                    ? formik.errors.name
-                    : ""
-                }
-                size="small"
-                autoComplete="off"
-              />
-            </div>
+            {/* Role Name */}
+            <TextField
+              fullWidth
+              name="name"
+              placeholder="Enter Role Name"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.name && !!formik.errors.name}
+              helperText={
+                formik.touched.name && typeof formik.errors.name === "string"
+                  ? formik.errors.name
+                  : ""
+              }
+              size="small"
+            />
 
             <Divider />
 
+            {/* Permissions Table */}
             <div className="border rounded-lg overflow-hidden">
-              <div className="grid grid-cols-3 bg-gray-100 p-3 text-sm font-semibold items-center">
-                <div className="pl-2">Permissions</div>
+              <div className="grid grid-cols-3 bg-gray-100 p-3 font-semibold text-sm">
+                <div>Permissions</div>
 
-                <div className="flex justify-center items-center">
-                  <div className="flex items-center gap-2">
-                    <Checkbox
-                      size="small"
-                      onChange={() => handleSelectAll("view")}
-                      checked={formik.values.permissions.every(
-                        (p: any) => p.view?.checked,
-                      )}
-                    />
-                    <span>View All</span>
-                  </div>
+                <div className="flex justify-center gap-2">
+                  <Checkbox
+                    size="small"
+                    onChange={() => handleSelectAll("view")}
+                    checked={formik.values.permissions.every(
+                      (p: any) => p.view?.checked
+                    )}
+                  />
+                  <span>View All</span>
                 </div>
 
-                <div className="flex justify-center items-center">
-                  <div className="flex items-center gap-2">
-                    <Checkbox
-                      size="small"
-                      onChange={() => handleSelectAll("edit")}
-                      checked={formik.values.permissions.every(
-                        (p: any) => p.edit?.checked,
-                      )}
-                    />
-                    <span>Edit All</span>
-                  </div>
+                <div className="flex justify-center gap-2">
+                  <Checkbox
+                    size="small"
+                    onChange={() => handleSelectAll("edit")}
+                    checked={formik.values.permissions.every(
+                      (p: any) => p.edit?.checked
+                    )}
+                  />
+                  <span>Edit All</span>
                 </div>
               </div>
 
@@ -210,11 +198,12 @@ export default function AddEditRole() {
                   key={perm.module}
                   className="grid grid-cols-3 items-center p-3 border-t text-sm"
                 >
-                  <div className="pl-2 capitalize">
+                  <div className="capitalize">
                     {perm.module.replace(/_/g, " ")}
                   </div>
 
-                  <div className="flex justify-center items-center">
+                  {/* VIEW */}
+                  <div className="flex justify-center">
                     <Checkbox
                       size="small"
                       checked={perm.view?.checked || false}
@@ -223,13 +212,22 @@ export default function AddEditRole() {
 
                         formik.setFieldValue(
                           `permissions[${index}].view.checked`,
-                          checked,
+                          checked
                         );
+
+                        // 🚨 important fix
+                        if (!checked && perm.edit?.checked) {
+                          formik.setFieldValue(
+                            `permissions[${index}].edit.checked`,
+                            false
+                          );
+                        }
                       }}
                     />
                   </div>
 
-                  <div className="flex justify-center items-center">
+                  {/* EDIT */}
+                  <div className="flex justify-center">
                     <Checkbox
                       size="small"
                       checked={perm.edit?.checked || false}
@@ -238,13 +236,14 @@ export default function AddEditRole() {
 
                         formik.setFieldValue(
                           `permissions[${index}].edit.checked`,
-                          checked,
+                          checked
                         );
 
+                        // 🚨 if edit → force view
                         if (checked && perm.view) {
                           formik.setFieldValue(
                             `permissions[${index}].view.checked`,
-                            true,
+                            true
                           );
                         }
                       }}
@@ -254,49 +253,30 @@ export default function AddEditRole() {
               ))}
             </div>
 
+            {/* Actions */}
             <div className="flex justify-center gap-4">
               <Button
                 variant="outlined"
                 onClick={() => navigate(ROUTES.ROLES_AND_PERMISSIONS)}
-                className="normal-case!"
                 sx={{ width: "200px" }}
               >
                 Cancel
               </Button>
+
               <Button
+                type="submit"
                 variant="contained"
-                onClick={() => formik.handleSubmit()}
-                disabled={!formik.isValid || formik.isSubmitting}
-                sx={{
-                  width: "200px",
-                  textTransform: "none",
-                }}
+                disabled={
+                  !formik.isValid ||
+                  !hasPermissionSelected ||
+                  formik.isSubmitting
+                }
+                sx={{ width: "200px" }}
               >
-                Save Role
+                {id ? "Update Role" : "Add Role"}
               </Button>
             </div>
           </CardContent>
-          {/* <CommonDialog
-                        open={openCancelDialog}
-                        title="Cancel"
-                        description={`Are you sure you want to Cancel ?`}
-                        onClose={toggleCancelDialog}
-                        onConfirm={() => {
-                            toggleCancelDialog();
-                            navigate(Paths.ROLES)
-                        }}
-                        cancelText='Cancel'
-                    />
-                    <CommonDialog
-                        open={openSaveDialog}
-                        title={`${id ? 'Update Role' : 'Add Role'}`}
-                        description={`Are you sure you want to ${id ? 'Update' : 'Add'} Role?`}
-                        onClose={toggleSaveDialog}
-                        onConfirm={() => {
-                            formik.handleSubmit();
-                        }}
-                        cancelText='Cancel'
-                    /> */}
         </Card>
       </form>
     </>

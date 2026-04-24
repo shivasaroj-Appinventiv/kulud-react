@@ -77,6 +77,11 @@ export const getPermissions = createAsyncThunk<PermissionGroup[]>(
     try {
       thunkAPI.dispatch(setLoading(true));
       const res = await http.get(endPoints.GET_ALL_PERMISSIONS);
+      // debugger
+      console.log(res);
+
+      console.log(res.data.data);
+      
       return formatPermissions(res.data.data);
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -214,6 +219,7 @@ const rolesSlice = createSlice({
       // PERMISSIONS
       .addCase(getPermissions.fulfilled, (state, action) => {
         state.permissions = action.payload;
+        state.status="succeeded";
       })
 
       // DETAILS

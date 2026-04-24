@@ -108,14 +108,14 @@ const CommonTableComponent = <T,>({
                     onClick={() =>
                       col.sortable && handleRequestSort(col.sortKey as string)
                     }
-                    className={`px-5 py-3 text-left text-[11px] font-semibold tracking-wider uppercase
+                    className={`px-5 py-3 text-left text-[11px] font-semibold tracking-wider uppercase 
                                 text-gray-500 whitespace-nowrap
                                 ${col.sortable ? "cursor-pointer hover:text-gray-800 select-none" : ""}`}
                     aria-sort={
                       isSorted ? (isAsc ? "ascending" : "descending") : "none"
                     }
                   >
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 justify-center">
                       <span>{col.header}</span>
                       {col.sortable && (
                         <span
@@ -173,7 +173,7 @@ const CommonTableComponent = <T,>({
               </>
             ) : data.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="py-16 text-center">
+                <td colSpan={columns.length} className="py-16 text-center justify-center">
                   <div className="flex flex-col items-center gap-2">
                     <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
                       <Search size={16} className="text-gray-400" />
@@ -195,13 +195,13 @@ const CommonTableComponent = <T,>({
                 <tr
                   key={row.id ?? rowIndex}
                   onClick={() => onRowClick(row)}
-                  className="hover:bg-blue-50/40 transition-colors duration-100 group"
+                  className="hover:bg-blue-50/40 transition-colors duration-100 group "
                 >
                   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   {columns.map((col: any, colIndex: number) => (
                     <td
                       key={colIndex}
-                      className="px-5 py-3.5 text-gray-700 group-hover:text-gray-900 transition-colors"
+                      className="px-5 py-3.5 text-gray-700 group-hover:text-gray-900 transition-colors text-center"
                     >
                       {col.render
                         ? col.render(row)
