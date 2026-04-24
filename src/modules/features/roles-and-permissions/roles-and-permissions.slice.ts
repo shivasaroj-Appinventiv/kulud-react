@@ -105,10 +105,14 @@ export const addRole = createAsyncThunk(
   "roles/addRole",
   async (payload: any, thunkAPI) => {
     try {
-      const res = await http.post("/roles", payload);
+      thunkAPI.dispatch(setLoading(true));
+      const res = await http.post(endPoints.CREATE_ROLE, payload);
+      toastService.showToast(res.data.message,"success");
       return res.data.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
+    }finally{
+      thunkAPI.dispatch(setLoading(false));
     }
   },
 );

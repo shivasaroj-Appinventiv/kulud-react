@@ -40,7 +40,7 @@ export const PAGE_HEADINGS = {
   SIGNUP: "Sign up",
   CONTENT: "Content",
   VERIFY_OTP: "verify-otp",
-  USER_MANAGEMENT: "USER MANAGEMENT",
-  CMS_MANAGEMENT: "CMS MANAGEMENT",
-  USER_DETAILS: "USER DETAILS",
+  USER_MANAGEMENT: "User Management",
+  CMS_MANAGEMENT: "CMS Management",
+  USER_DETAILS: "User Details",
 };

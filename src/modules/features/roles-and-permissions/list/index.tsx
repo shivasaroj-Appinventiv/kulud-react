@@ -2,8 +2,7 @@ import Breadcrumb from "@/components/breadcrumb";
 import useRolesAndPermissionsHelper from "./roles-and-permissions.helper";
 import CommonTableComponent from "@/components/common-table/CommonTableComponent";
 import RowActionMenu from "./RowActionMenu";
-import userPrivacyPolicyHelper from "../../cms/components/privacy-policy/privacy-policy.helper";
-import { Chip } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 
 const RolesAndPermissions = () => {
   const {
@@ -14,14 +13,9 @@ const RolesAndPermissions = () => {
     onEdit,
     onDetails,
     breadcrumbs,
-    showFilter,
-    handleToggleFilter,
-    handleCloseFilter,
-    handleApplyFilter,
-    isFilterApplied,
-    filters,
     isLoading,
     onStatusUpdate,
+    handleAddRole,
   } = useRolesAndPermissionsHelper();
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleString("en-IN", {
@@ -82,7 +76,13 @@ const RolesAndPermissions = () => {
 
   return (
     <>
+    <div className="flex justify-between ql-align-center mb-4">
       <Breadcrumb breadCrumbs={breadcrumbs}></Breadcrumb>
+      <Button 
+                                      variant="contained"
+
+      className="" onClick={handleAddRole} >Add Role</Button>
+    </div>
       <CommonTableComponent
         searchPlaceHolder="Search by Role Name"
         loading={isLoading}
@@ -92,10 +92,8 @@ const RolesAndPermissions = () => {
         pageSize={10}
         pageOptions={pageOptions}
         handlePageOptionsChanged={handlePageOptionsChanged}
-        onRowClick={(row) => {}}
+        onRowClick={() => {}}
         isFilterPresent={false}
-        // onToggleFilter={handleToggleFilter}
-        // isFilterApplied={isFilterApplied}
       ></CommonTableComponent>
     </>
   );

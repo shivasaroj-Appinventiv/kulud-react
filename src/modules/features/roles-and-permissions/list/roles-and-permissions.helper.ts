@@ -135,6 +135,9 @@ const useRolesAndPermissionsHelper = () => {
 
     setShowFilter(false);
   };
+  const  handleAddRole =()=>{
+    navigate(ROUTES.ADD_ROLES);
+  } 
   return {
     handlePageOptionsChanged,
     permissionList,
@@ -154,6 +157,7 @@ const useRolesAndPermissionsHelper = () => {
     filters,
     isLoading,
     onStatusUpdate,
+    handleAddRole
   };
 };
 

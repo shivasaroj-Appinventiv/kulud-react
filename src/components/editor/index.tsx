@@ -11,7 +11,7 @@ const QuillEditor = ({ value, onChange }: QuillEditorProps) => {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
       ["bold", "italic", "underline"],
-      [{ list: "ordered" }, { list: "bullet" }],
+      [{ list: "ordered" }],
       ["link", "image"],
       ["clean"],
     ],
@@ -23,7 +23,6 @@ const QuillEditor = ({ value, onChange }: QuillEditorProps) => {
     "italic",
     "underline",
     "list",
-    "bullet",
     "link",
     "image",
   ];

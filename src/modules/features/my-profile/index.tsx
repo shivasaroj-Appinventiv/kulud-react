@@ -17,7 +17,7 @@ const MyProfile = () => {
             className="w-32 h-32 rounded-full border-2 border-gray-300"
           />
         </div>
-        <button className="">Edit</button>
+        {/* <button className="">Edit</button> */}
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
