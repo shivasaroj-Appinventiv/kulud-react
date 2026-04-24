@@ -10,6 +10,8 @@ import type {
 import endPoints from "@/api/endPoints";
 import type { ApiResponse, PaginatedQuery } from "@/interfaces/api.interface";
 import { DEFAULT_PAGE_OPTIONS } from "@/internal/api.constant";
+import { setLoading } from "@/redux/slices/global.slice";
+import { toastService } from "@/utils/toast.service";
 
 const initialState: RoleState = {
   roles: [],
@@ -17,11 +19,11 @@ const initialState: RoleState = {
   permissions: [],
   roleDetails: null,
   loading: false,
-      params:DEFAULT_PAGE_OPTIONS,
-    error: "",
-    status: "idle",
-    totalDocs: 0,
-    details: null
+  params: DEFAULT_PAGE_OPTIONS,
+  error: "",
+  status: "idle",
+  totalDocs: 0,
+  details: null,
 };
 
 const formatPermissions = (list: Permission[]): PermissionGroup[] => {
@@ -47,7 +49,6 @@ const formatPermissions = (list: Permission[]): PermissionGroup[] => {
   return Object.values(map);
 };
 
-
 // ==============================
 // ✅ API CALLS
 // ==============================
@@ -56,36 +57,48 @@ export const getRoles = createAsyncThunk(
   "roles/getRoles",
   async (query: PaginatedQuery, thunkAPI) => {
     try {
-      const res = await http.get<ApiResponse<any>>(endPoints.ROLE_LIST_NEW, query);
+      thunkAPI.dispatch(setLoading(true));
+      const res = await http.get<ApiResponse<any>>(
+        endPoints.ROLE_LIST_NEW,
+        query,
+      );
       return res.data.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
+    } finally {
+      thunkAPI.dispatch(setLoading(false));
     }
-  }
+  },
 );
 
 export const getPermissions = createAsyncThunk<PermissionGroup[]>(
   "roles/getPermissions",
   async (_, thunkAPI) => {
     try {
+      thunkAPI.dispatch(setLoading(true));
       const res = await http.get(endPoints.GET_ALL_PERMISSIONS);
       return formatPermissions(res.data.data);
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
+    } finally {
+      thunkAPI.dispatch(setLoading(false));
     }
-  }
+  },
 );
 
 export const getRoleDetails = createAsyncThunk<Role, string>(
   "roles/getRoleDetails",
-  async (roleId, thunkAPI) => {
+  async (roleId: string, thunkAPI) => {
     try {
-      const res = await http.get(`/roles/${roleId}`);
+      thunkAPI.dispatch(setLoading(true));
+      const res = await http.get(endPoints.GET_ROLE_BY_ID(roleId));
       return res.data.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
+    } finally {
+      thunkAPI.dispatch(setLoading(false));
     }
-  }
+  },
 );
 
 export const addRole = createAsyncThunk(
@@ -97,19 +110,23 @@ export const addRole = createAsyncThunk(
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }
-  }
+  },
 );
 
 export const updateRole = createAsyncThunk(
   "roles/updateRole",
-  async ({ roleId, payload }: any, thunkAPI) => {
+  async ({ roleId, status }: any, thunkAPI) => {
     try {
-      const res = await http.put(`/roles/${roleId}`, payload);
+      thunkAPI.dispatch(setLoading(true));
+      const res = await http.put(endPoints.ROLE_UPDATE(roleId), { status });
+      toastService.showToast(res.data.message, "success");
       return res.data.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
+    } finally {
+      thunkAPI.dispatch(setLoading(false));
     }
-  }
+  },
 );
 
 export const deleteRole = createAsyncThunk(
@@ -121,9 +138,8 @@ export const deleteRole = createAsyncThunk(
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }
-  }
+  },
 );
-
 
 // ==============================
 // ✅ SLICE
@@ -137,19 +153,26 @@ const rolesSlice = createSlice({
       state.roleDetails = null;
     },
 
+    setParams: (state, action) => {
+      state.params = action.payload;
+    },
+    resetParams: (state, action) => {
+      state.params = DEFAULT_PAGE_OPTIONS;
+    },
+
     applyRolePermissions: (state, action) => {
       const rolePermissions = action.payload;
 
       state.permissions.forEach((perm) => {
         if (perm.view) {
           perm.view.checked = !!rolePermissions.find(
-            (p: Permission) => p.id === perm.view?.id
+            (p: Permission) => p.id === perm.view?.id,
           );
         }
 
         if (perm.edit) {
           perm.edit.checked = !!rolePermissions.find(
-            (p: Permission) => p.id === perm.edit?.id
+            (p: Permission) => p.id === perm.edit?.id,
           );
         }
       });
@@ -180,6 +203,7 @@ const rolesSlice = createSlice({
       // LIST
       .addCase(getRoles.fulfilled, (state, action) => {
         state.roles = action.payload.items;
+        state.totalDocs = action.payload.meta.totalItems;
         state.total = action.payload.totalItems;
       })
 
@@ -195,7 +219,7 @@ const rolesSlice = createSlice({
 
       // DELETE
       .addCase(deleteRole.fulfilled, (state, action) => {
-        state.roles = state.roles.filter(r => r.id !== action.payload);
+        state.roles = state.roles.filter((r) => r.id !== action.payload);
       });
   },
 });
@@ -205,6 +229,8 @@ export const {
   applyRolePermissions,
   toggleView,
   toggleEdit,
+  setParams,
+  resetParams,
 } = rolesSlice.actions;
 
 export default rolesSlice.reducer;

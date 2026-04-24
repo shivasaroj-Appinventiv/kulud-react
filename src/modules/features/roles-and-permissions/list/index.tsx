@@ -79,7 +79,6 @@ const RolesAndPermissions = () => {
       ),
     },
   ];
-  const { permissionList } = useRolesAndPermissionsHelper();
 
   return (
     <>
@@ -94,8 +93,9 @@ const RolesAndPermissions = () => {
         pageOptions={pageOptions}
         handlePageOptionsChanged={handlePageOptionsChanged}
         onRowClick={(row) => {}}
-        onToggleFilter={handleToggleFilter}
-        isFilterApplied={isFilterApplied}
+        isFilterPresent={false}
+        // onToggleFilter={handleToggleFilter}
+        // isFilterApplied={isFilterApplied}
       ></CommonTableComponent>
     </>
   );

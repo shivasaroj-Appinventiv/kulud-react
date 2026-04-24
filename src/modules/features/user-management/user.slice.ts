@@ -3,15 +3,18 @@ import type { User, UserManagementSlice } from "./user-management.interfaces";
 import { setLoading } from "../../../redux/slices/global.slice";
 import { http } from "../../../api/http.service";
 import endPoints from "../../../api/endPoints";
-import type { ApiResponse, PaginatedQuery } from "../../../interfaces/api.interface";
+import type {
+  ApiResponse,
+  PaginatedQuery,
+} from "../../../interfaces/api.interface";
 import { toastService } from "../../../utils/toast.service";
 import { DEFAULT_PAGE_OPTIONS } from "../../../internal/api.constant";
-const defaultPageOptions:PaginatedQuery=DEFAULT_PAGE_OPTIONS;
+const defaultPageOptions: PaginatedQuery = DEFAULT_PAGE_OPTIONS;
 const userManagementSlice = createSlice({
   name: "UserManagement",
   initialState: {
     usersLists: [],
-    params:defaultPageOptions,
+    params: defaultPageOptions,
     error: "",
     status: "idle",
     totalDocs: 0,
@@ -22,16 +25,15 @@ const userManagementSlice = createSlice({
     setUserDetails: (state, action) => {
       state.details = action.payload;
     },
-    setParams: (state,action)=>{
-      state.params=action.payload;
+    setParams: (state, action) => {
+      state.params = action.payload;
     },
-    resetParams:(state,action)=>{
-      state.params=DEFAULT_PAGE_OPTIONS
-    }
+    resetParams: (state, action) => {
+      state.params = DEFAULT_PAGE_OPTIONS;
+    },
   },
 
   extraReducers(builder) {
-
     // ─── getUsersList ───────────────────────────────
     builder.addCase(getUsersList.pending, (state) => {
       state.status = "loading";
@@ -39,10 +41,10 @@ const userManagementSlice = createSlice({
     builder.addCase(getUsersList.fulfilled, (state, action) => {
       state.status = "succeeded";
       console.log(action.payload.items);
-      
+
       state.usersLists = action.payload.items;
       console.log(state.usersLists);
-      
+
       state.totalDocs = action.payload.meta.totalItems;
     });
     builder.addCase(getUsersList.rejected, (state) => {
@@ -94,7 +96,10 @@ export const getUsersList = createAsyncThunk(
   async (query: PaginatedQuery, thunkAPI) => {
     try {
       thunkAPI.dispatch(setLoading(true));
-      const response = await http.get<ApiResponse<any>>(endPoints.userList, query);
+      const response = await http.get<ApiResponse<any>>(
+        endPoints.userList,
+        query,
+      );
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -109,7 +114,9 @@ export const getUserDetails = createAsyncThunk(
   async (userId: string, thunkAPI) => {
     try {
       thunkAPI.dispatch(setLoading(true));
-      const response = await http.get<ApiResponse<any>>(endPoints.userDetails(userId));
+      const response = await http.get<ApiResponse<any>>(
+        endPoints.userDetails(userId),
+      );
       return response.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -139,5 +146,6 @@ export const updateUserStatus = createAsyncThunk(
   },
 );
 
-export const { setUserDetails,setParams,resetParams } = userManagementSlice.actions;
+export const { setUserDetails, setParams, resetParams } =
+  userManagementSlice.actions;
 export default userManagementSlice.reducer;

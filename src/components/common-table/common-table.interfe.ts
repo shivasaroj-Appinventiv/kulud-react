@@ -23,5 +23,6 @@ export interface CommonTableProps<T> {
   children?: React.ReactNode;
   onToggleFilter?: () => void;
   isFilterApplied?:boolean
+  isFilterPresent?:boolean
 
 }

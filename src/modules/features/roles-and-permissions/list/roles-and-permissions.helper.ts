@@ -5,7 +5,11 @@ import {
 } from "@/redux/store";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getPermissions, getRoles } from "../roles-and-permissions.slice";
+import {
+  getRoles,
+  setParams,
+  updateRole,
+} from "../roles-and-permissions.slice";
 import { DEFAULT_PAGE_OPTIONS } from "@/internal/api.constant";
 import type { PaginatedQuery } from "@/interfaces/api.interface";
 import type { BreadCrumbType } from "@/components/breadcrumb/breadcrumb.helper";
@@ -13,9 +17,8 @@ import { PAGE_HEADINGS, ROUTES } from "@/routes/RouteConstant";
 import { useNavigate } from "react-router-dom";
 import { COMMON_MESSAGES } from "@/constants/messages";
 import { STATUS_TYPE_VALUE } from "@/constants/constant";
-import { DialogActionBtn } from "@/constants/dialog-btn.enum";
 import { openDialog } from "@/redux/slices/global.slice";
-import type { PermissionGroup, Role } from "../role-and-permissions.interface";
+import type { Role } from "../role-and-permissions.interface";
 
 const useRolesAndPermissionsHelper = () => {
   const permissionList: any[] = ["sdsds"];
@@ -32,11 +35,11 @@ const useRolesAndPermissionsHelper = () => {
       path: ROUTES.ROLES_AND_PERMISSIONS,
     },
   ];
-  const onEdit = (row: any) => {
-    // navigate(ROUTES.EDIT_ORGANIZATION_DETAILS(row._id));
+  const onEdit = (row: Role) => {
+    navigate(ROUTES.GET_EDIT_ROLES(row.id));
   };
   const onDetails = (row: any) => {
-    navigate(ROUTES.GET_USER_DETAILS(row.id));
+    navigate(ROUTES.GET_ROLES_DETAILS(row.id));
   };
 
   useEffect(() => {
@@ -46,10 +49,9 @@ const useRolesAndPermissionsHelper = () => {
     };
   }, [dispatch, pageOptions]);
 
-  const { totalDocs,roles } = useAppSelector(
+  const { totalDocs, roles } = useAppSelector(
     (state: RootState) => state.permissionsSlice,
   );
-
 
   const params = useAppSelector(
     (state: RootState) => state.userManagement.params,
@@ -64,7 +66,6 @@ const useRolesAndPermissionsHelper = () => {
 
   const [showFilter, setShowFilter] = useState(false);
 
-
   const handleCloseFilter = () => {
     setShowFilter(false);
   };
@@ -73,41 +74,36 @@ const useRolesAndPermissionsHelper = () => {
   };
   const [isFilterApplied, setIsFilterApplied] = useState(false);
 
-  const updateStatus = async (data: { userId: string; type: string }) => {
-    // dispatch(setParams(pageOptions));
-    // const res = await dispatch(updateUserStatus(data)).unwrap();
-    // dispatch(getUsersList(pageOptions));
+  const updateStatus = async (data: { roleId: string; status: string }) => {
+    dispatch(setParams(pageOptions));
+    const res = await dispatch(updateRole(data)).unwrap();
+    dispatch(getRoles(pageOptions));
   };
   const onStatusUpdate = (role: Role) => {
-    // const type =
-    //   role.status === STATUS_TYPE_VALUE.ACTIVE ? "deactivate" : "activate";
-    // const userId = role.id;
+    const status =
+      role.status === STATUS_TYPE_VALUE.ACTIVE ? "INACTIVE" : "ACTIVE";
+    const roleId = role.id;
 
-    // const data = {
-    //   title:
-    //     role.status === STATUS_TYPE_VALUE.ACTIVE
-    //       ? COMMON_MESSAGES.DEACTIVATED.title("User")
-    //       : COMMON_MESSAGES.ACTIVATED.title("User"),
-    //   headerText:
-    //     role.status === STATUS_TYPE_VALUE.ACTIVE
-    //       ? COMMON_MESSAGES.ACCESS("restricted")
-    //       : COMMON_MESSAGES.ACCESS("restored"),
-    //   submitButtonText:
-    //     role.status === STATUS_TYPE_VALUE.ACTIVE
-    //       ? DialogActionBtn.DEACTIVATE
-    //       : DialogActionBtn.ACTIVATE,
-    //   cancelButtonText: DialogActionBtn.CANCEL,
-    // };
-    // dispatch(
-    //   openDialog({
-    //     open: true,
-    //     message: data.headerText,
-    //     onConfirm: () => {
-    //       void updateStatus({ userId, type });
-    //     },
-    //     title: "",
-    //   }),
-    // );
+    const data = {
+      title:
+        role.status === STATUS_TYPE_VALUE.ACTIVE
+          ? COMMON_MESSAGES.DEACTIVATED.title("Role")
+          : COMMON_MESSAGES.ACTIVATED.title("Role"),
+      headerText:
+        role.status === STATUS_TYPE_VALUE.ACTIVE
+          ? COMMON_MESSAGES.DEACTIVATED.confirm("Deactivate", false, "role")
+          : COMMON_MESSAGES.ACTIVATED.confirm("Activate", false, "role"),
+    };
+    dispatch(
+      openDialog({
+        open: true,
+        message: data.headerText,
+        onConfirm: () => {
+          void updateStatus({ roleId, status });
+        },
+        title: "",
+      }),
+    );
   };
 
   const pageOptionsRef = useRef<PaginatedQuery>(pageOptions);

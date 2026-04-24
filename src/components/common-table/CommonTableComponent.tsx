@@ -24,6 +24,7 @@ const CommonTableComponent = <T,>({
   title,
   children,
   onToggleFilter,
+  isFilterPresent=true,
   isFilterApplied,
 }: CommonTableProps<T>) => {
   const {
@@ -73,7 +74,10 @@ const CommonTableComponent = <T,>({
                        transition-all duration-150"
             />
           </div>
+          {isFilterPresent &&
 
+          <>
+          
           <button
             onClick={onToggleFilter}
             className={`h-9 w-9 flex items-center justify-center border rounded-lg bg-gray-50 hover:bg-gray-100 cursor-pointer ${
@@ -82,6 +86,8 @@ const CommonTableComponent = <T,>({
           >
             <ListFilterIcon />
           </button>
+          </>
+          }
 
           {children}
         </div>

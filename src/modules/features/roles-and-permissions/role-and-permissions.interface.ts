@@ -23,6 +23,8 @@ export interface Role {
   id: string;
   name: string;
   status: string;
+  totalUsers?:number;
+  createdAt?:string;
   permissions: Permission[];
 }
 
