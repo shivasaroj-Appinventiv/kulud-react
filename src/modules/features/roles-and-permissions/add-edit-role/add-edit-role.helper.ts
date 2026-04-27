@@ -1,9 +1,9 @@
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { BreadCrumbType } from "@/components/breadcrumb/breadcrumb.helper";
 import { PAGE_HEADINGS, ROUTES } from "@/routes/RouteConstant";
-import { getPermissions, getRoleDetails } from "../roles-and-permissions.slice";
+import { getPermissions, getRoleDetails, resetRoleDetails } from "../roles-and-permissions.slice";
 import { useAppSelector, type AppDispatch } from "@/redux/store";
 
 export const useAddEditRoleHelper = () => {
@@ -12,17 +12,22 @@ export const useAddEditRoleHelper = () => {
   const navigate = useNavigate();
   const [openCancelDialog, setOpenCancelDialog] = useState(false);
   const [openSaveDialog, setOpenSavelDialog] = useState(false);
-  const breadcrumbs: BreadCrumbType[] = [
-    {
-      title: PAGE_HEADINGS.ROLES_AND_PERMISSIONS,
-      path: ROUTES.ROLES_AND_PERMISSIONS,
-    },
-    {
-      title: PAGE_HEADINGS.EDIT_ROLE,
-      path: ROUTES.EDIT_ROLES,
-    },
-  ];
-  useEffect(()=>{
+  const breadcrumbs: BreadCrumbType[] =useMemo(()=>[
+  {
+    title: PAGE_HEADINGS.ROLES_AND_PERMISSIONS,
+    path: ROUTES.ROLES_AND_PERMISSIONS,
+  },
+  id? {
+        title: PAGE_HEADINGS.EDIT_ROLE,
+        path: ROUTES.EDIT_ROLES,
+      }
+      :{
+        title: PAGE_HEADINGS.ADD_ROLE,
+        path: ROUTES.ADD_ROLES,
+      },
+  ],[id])
+  
+    useEffect(()=>{
     dispatch(getPermissions());
   },[])
   const toggleCancelDialog = () => {
@@ -43,6 +48,9 @@ export const useAddEditRoleHelper = () => {
   useEffect(() => {
     if (id) {
       dispatch(getRoleDetails( id ));
+    }
+    return ()=>{
+      dispatch(resetRoleDetails());
     }
   }, [id]);
 

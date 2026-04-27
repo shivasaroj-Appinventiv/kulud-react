@@ -58,7 +58,7 @@ export const getPermissions = createAsyncThunk<PermissionGroup[]>(
       console.log(res);
 
       console.log(res.data.data);
-      
+
       return res.data.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -89,11 +89,11 @@ export const addRole = createAsyncThunk(
     try {
       thunkAPI.dispatch(setLoading(true));
       const res = await http.post(endPoints.CREATE_ROLE, payload);
-      toastService.showToast(res.data.message,"success");
+      toastService.showToast(res.data.message, "success");
       return res.data.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
-    }finally{
+    } finally {
       thunkAPI.dispatch(setLoading(false));
     }
   },
@@ -101,10 +101,12 @@ export const addRole = createAsyncThunk(
 
 export const updateRole = createAsyncThunk(
   "roles/updateRole",
-  async ({ roleId, status }: any, thunkAPI) => {
+  async (payload: any, thunkAPI) => {
+    const { id } = payload;
+    delete payload.id;
     try {
       thunkAPI.dispatch(setLoading(true));
-      const res = await http.put(endPoints.ROLE_UPDATE(roleId), { status });
+      const res = await http.put(endPoints.ROLE_UPDATE(id), payload);
       toastService.showToast(res.data.message, "success");
       return res.data.data;
     } catch (err) {
@@ -136,7 +138,7 @@ const rolesSlice = createSlice({
   initialState,
   reducers: {
     resetRoleDetails: (state) => {
-      state.roleDetails = null;
+      state.details = null;
     },
 
     setParams: (state, action) => {
@@ -196,11 +198,11 @@ const rolesSlice = createSlice({
       // PERMISSIONS
       .addCase(getPermissions.fulfilled, (state, action) => {
         state.permissions = action.payload;
-        state.status="succeeded";
+        state.status = "succeeded";
       })
 
       // DETAILS
-      .addCase(getRoleDetails.fulfilled, (state, action) => {       
+      .addCase(getRoleDetails.fulfilled, (state, action) => {
         state.details = action.payload;
       })
 
@@ -208,10 +210,8 @@ const rolesSlice = createSlice({
       .addCase(deleteRole.fulfilled, (state, action) => {
         state.roles = state.roles.filter((r) => r.id !== action.payload);
       })
-      
-      .addCase(addRole.fulfilled,(state,action)=>{
 
-      })
+      .addCase(addRole.fulfilled, (state, action) => {});
   },
 });
 
