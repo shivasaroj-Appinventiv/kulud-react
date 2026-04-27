@@ -26,29 +26,6 @@ const initialState: RoleState = {
   details: null,
 };
 
-const formatPermissions = (list: Permission[]): PermissionGroup[] => {
-  const map: Record<string, PermissionGroup> = {};
-
-  list.forEach((item) => {
-    if (!map[item.module]) {
-      map[item.module] = {
-        module: item.module,
-        displayName: item.module.replace(/_/g, " "),
-      };
-    }
-
-    if (item.action === "view") {
-      map[item.module].view = { ...item, checked: false };
-    }
-
-    if (item.action === "edit") {
-      map[item.module].edit = { ...item, checked: false };
-    }
-  });
-
-  return Object.values(map);
-};
-
 // ==============================
 // ✅ API CALLS
 // ==============================
@@ -82,7 +59,7 @@ export const getPermissions = createAsyncThunk<PermissionGroup[]>(
 
       console.log(res.data.data);
       
-      return formatPermissions(res.data.data);
+      return res.data.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     } finally {
@@ -223,14 +200,18 @@ const rolesSlice = createSlice({
       })
 
       // DETAILS
-      .addCase(getRoleDetails.fulfilled, (state, action) => {
-        state.roleDetails = action.payload;
+      .addCase(getRoleDetails.fulfilled, (state, action) => {       
+        state.details = action.payload;
       })
 
       // DELETE
       .addCase(deleteRole.fulfilled, (state, action) => {
         state.roles = state.roles.filter((r) => r.id !== action.payload);
-      });
+      })
+      
+      .addCase(addRole.fulfilled,(state,action)=>{
+
+      })
   },
 });
 
