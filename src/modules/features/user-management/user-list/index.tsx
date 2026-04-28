@@ -2,9 +2,8 @@ import Breadcrumb from "../../../../components/breadcrumb";
 import CommonTableComponent from "../../../../components/common-table/CommonTableComponent";
 import { useUserListHelper } from "./userListHelper";
 import UserFilter from "../user-filter";
-import React from "react";
 import RowActionMenu from "./RowActionMenu";
-import { Chip } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 const userList = () => {
   const {
     usersLists,
@@ -22,6 +21,7 @@ const userList = () => {
     filters,
     isLoading,
     onStatusUpdate,
+    handleAddUser
   } = useUserListHelper();
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleString("en-IN", {
@@ -92,7 +92,11 @@ const userList = () => {
 
   return (
     <>
+    <div className="flex  justify-between al-center mb-4">
       <Breadcrumb breadCrumbs={breadcrumbs}></Breadcrumb>
+      <Button onClick={handleAddUser} variant="contained">Add User</Button>
+      
+    </div>
       <CommonTableComponent
         searchPlaceHolder="Search by name"
         loading={isLoading}

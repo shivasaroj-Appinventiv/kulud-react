@@ -48,15 +48,47 @@ export const getRoles = createAsyncThunk(
   },
 );
 
+
+export const getRolesForDropDown = createAsyncThunk(
+  "roles/getRolesForDropDown",
+  async (_, thunkAPI) => {
+    try {
+      thunkAPI.dispatch(setLoading(true));
+      const res = await http.get<ApiResponse<any>>(
+        endPoints.ROLE_LIST_FOR_DROPDOWN,
+      );
+      return res.data.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    } finally {
+      thunkAPI.dispatch(setLoading(false));
+    }
+  },
+);
+
+export const getBranchesForDropDown = createAsyncThunk(
+  "roles/getBranchForDropDown",
+  async (_, thunkAPI) => {
+    try {
+      thunkAPI.dispatch(setLoading(true));
+      const res = await http.get<ApiResponse<any>>(
+        endPoints.BRANCH_LIST_FOR_DROPDOWN,
+      );
+      return res.data.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    } finally {
+      thunkAPI.dispatch(setLoading(false));
+    }
+  },
+);
+
 export const getPermissions = createAsyncThunk<PermissionGroup[]>(
   "roles/getPermissions",
   async (_, thunkAPI) => {
     try {
       thunkAPI.dispatch(setLoading(true));
       const res = await http.get(endPoints.GET_ALL_PERMISSIONS);
-      // debugger
-      console.log(res);
-
       console.log(res.data.data);
 
       return res.data.data;

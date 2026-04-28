@@ -68,3 +68,23 @@ export const addUpdateOrganizationSchema = Yup.object({
     }),
   ),
 });
+
+export const userValidationSchema = Yup.object({
+  fullName: Yup.string()
+    .trim()
+    .min(3, "Minimum 3 characters required")
+    .max(15, "Maximum 15 characters allowed")
+    .required("Full name is required"),
+
+  email: Yup.string()
+    .email("Invalid email")
+    .required("Email is required"),
+
+  roleId: Yup.string().required("Role is required"),
+
+  phone: Yup.string()
+    .matches(/^[0-9]{10}$/, "Mobile number must be exactly 10 digits")
+    .required("Phone number is required"),
+
+  branchId: Yup.string().nullable(),
+});

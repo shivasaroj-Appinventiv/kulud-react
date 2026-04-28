@@ -13,7 +13,8 @@ export const ROUTES = {
   // Absolute — for navigate() and <Link to>
   USER_MANAGEMENT: "/users",
   Add_USER:"/users/add",
-  EDIT_USER:(id:string)=>`/users/add/${id}`,
+  STATIC_EDIT_USER:"/users/edit",
+  EDIT_USER:(id:string)=>`/users/edit/${id}`,
   ROLES_AND_PERMISSIONS: "/roles-and-permissions",
   GET_ROLES_DETAILS:(id:string)=> `/roles-and-permissions/${id}`,
   ROLES_DETAILS: `/roles-and-permissions/:id`,
@@ -21,6 +22,7 @@ export const ROUTES = {
   GET_EDIT_ROLES: (id:string)=> `/roles-and-permissions/edit/${id}`,
   ADD_ROLES: `/roles-and-permissions/add`,
   GET_USER_DETAILS: (id: string) => `/users/${id}`,
+  USER_DETAILS:  '/users/:id',
   ORGANIZATIONS: "/organizations",
   GET_ORGANIZATION_DETAILS: (id: string) => `/organizations/${id}`,
   EDIT_ORGANIZATION_DETAILS: (id: string) => `/organizations/edit/${id}`,

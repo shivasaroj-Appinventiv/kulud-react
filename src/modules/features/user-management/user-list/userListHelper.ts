@@ -32,7 +32,7 @@ export const useUserListHelper = () => {
     { title: "User Management", path: ROUTES.USER_MANAGEMENT },
   ];
   const onEdit = (row: any) => {
-    // navigate(ROUTES.EDIT_ORGANIZATION_DETAILS(row._id));
+    navigate(ROUTES.EDIT_USER(row.id));
   };
   const onDetails = (row: any) => {
     navigate(ROUTES.GET_USER_DETAILS(row.id));
@@ -153,6 +153,11 @@ export const useUserListHelper = () => {
 
     setShowFilter(false);
   };
+  const handleAddUser = () => {
+    console.log('dddddd');
+    
+    navigate(ROUTES.Add_USER);
+  };
   return {
     handlePageOptionsChanged,
     usersLists,
@@ -171,5 +176,6 @@ export const useUserListHelper = () => {
     filters,
     isLoading,
     onStatusUpdate,
+    handleAddUser,
   };
 };

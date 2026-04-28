@@ -31,6 +31,8 @@ const endPoints = {
   APPLICATION_CMS: `${CMS}/${API}/${VERSION}/application-terms`,
 
   ROLE_LIST_NEW: `${ADMIN}/${API}/${VERSION}/${ROLE}`,
+  ROLE_LIST_FOR_DROPDOWN: `${ADMIN}/${API}/${VERSION}/${ROLE}/for-dropdown`,
+  BRANCH_LIST_FOR_DROPDOWN: `${ADMIN}/${API}/${VERSION}/branch/for-dropdown`,
   CREATE_ROLE: `${ADMIN}/${API}/${VERSION}/${ROLE}`,
   GET_ALL_PERMISSIONS: `${ADMIN}/${API}/${VERSION}/${ROLE}/permissions`,
   DELETE_ROLE: (id: string) => `${ADMIN}/${API}/${VERSION}/${ROLE}/${id}`,
@@ -40,6 +42,8 @@ const endPoints = {
 
   userList: `${adminService}/sub-admins`,
   userDetails: (id: string) => `${adminService}/sub-admins/${id}`,
+  USER_CREATE : `${ADMIN}/${API}/${VERSION}/${SUB_ADMINS}`,
+  USER_UPDATE :(id:string)=> `${ADMIN}/${API}/${VERSION}/${SUB_ADMINS}/${id}`,
   USER_ACTIVATE_DEACTIVATE: (id: string | number, type: string) =>
     `${adminService}/${SUB_ADMINS}/${id}/${type}`,
 };

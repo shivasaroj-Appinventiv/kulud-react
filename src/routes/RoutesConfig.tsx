@@ -21,6 +21,7 @@ const UserList = lazy(() => import("@features/user-management/user-list"));
 const UserDetails = lazy(
   () => import("@features/user-management/user-details"),
 );
+const AddUser = lazy(() => import("@features/user-management/add-edit-user"));
 //Permissions
 const RolesAndPermission = lazy(
   () => import("@/modules/features/roles-and-permissions/list"),
@@ -86,6 +87,26 @@ export const APP_ROUTES: AppRoute[] = [
     element: <UserList />,
   },
   {
+    path: ROUTES.Add_USER, // "/users"
+    Layout: DashboardLayout,
+    isPrivate: true,
+    element: <AddUser />,
+  },
+
+  {
+    path: ROUTES.EDIT_USER(":id"), // "/users/:id"
+    Layout: DashboardLayout,
+    isPrivate: true,
+    element: <AddUser />,
+  },
+
+    {
+    path: ROUTES.USER_DETAILS,
+    Layout: DashboardLayout,
+    isPrivate: true,
+    element: <UserDetails />,
+  },
+  {
     path: ROUTES.ROLES_AND_PERMISSIONS,
     Layout: DashboardLayout,
     isPrivate: true,
@@ -111,12 +132,6 @@ export const APP_ROUTES: AppRoute[] = [
     element: <AddEditRole />,
   },
 
-  {
-    path: ROUTES.GET_USER_DETAILS(":id"), // "/users/:id"
-    Layout: DashboardLayout,
-    isPrivate: true,
-    element: <UserDetails />,
-  },
   {
     path: ROUTES.CMS, // "/cms"
     Layout: DashboardLayout,

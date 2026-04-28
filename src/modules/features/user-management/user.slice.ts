@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { User, UserManagementSlice } from "./user-management.interfaces";
+import type { CreateUser, User, UserManagementSlice } from "./user-management.interfaces";
 import { setLoading } from "../../../redux/slices/global.slice";
 import { http } from "../../../api/http.service";
 import endPoints from "../../../api/endPoints";
@@ -88,7 +88,11 @@ const userManagementSlice = createSlice({
     builder.addCase(updateUserStatus.rejected, (state) => {
       state.status = "failed";
     });
+    builder.addCase(createUser.fulfilled,(state,action)=>{
+      state.status="succeeded";
+    })
   },
+
 });
 
 export const getUsersList = createAsyncThunk(
@@ -145,6 +149,42 @@ export const updateUserStatus = createAsyncThunk(
     }
   },
 );
+
+export const createUser = createAsyncThunk("userManagement/create",async(payload:CreateUser,thunkAPI)=>{
+   try {
+      thunkAPI.dispatch(setLoading(true));
+      const response = await http.post<ApiResponse<any>>(
+        endPoints.USER_CREATE,
+        payload
+      );
+      console.log(response.data,'*******');
+      toastService.showToast(response.data.message,"success");
+      return response.data.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    } finally {
+      thunkAPI.dispatch(setLoading(false));
+    }
+});
+
+export const updateUser = createAsyncThunk("userManagement/create",async(payload:CreateUser,thunkAPI)=>{
+   try {
+      thunkAPI.dispatch(setLoading(true));
+      const id = payload.id||'';
+      delete payload.id;
+      const response = await http.put<ApiResponse<any>>(
+        endPoints.USER_UPDATE(id),
+        payload
+      );
+      console.log(response.data,'*******');
+      toastService.showToast(response.data.message,"success");
+      return response.data.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    } finally {
+      thunkAPI.dispatch(setLoading(false));
+    }
+});
 
 export const { setUserDetails, setParams, resetParams } =
   userManagementSlice.actions;
