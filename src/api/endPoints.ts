@@ -46,6 +46,12 @@ const endPoints = {
   USER_UPDATE :(id:string)=> `${ADMIN}/${API}/${VERSION}/${SUB_ADMINS}/${id}`,
   USER_ACTIVATE_DEACTIVATE: (id: string | number, type: string) =>
     `${adminService}/${SUB_ADMINS}/${id}/${type}`,
+
+//Images
+
+ FILE_UPLOAD : `${ADMIN}/${API}/${VERSION}/fetch-presigned-url`,
+
+
 };
 export const EVENT_DETAIL_BY_ID = (eventId: string) =>
   `organizer/api/v1/organizer/panel-organizer-event-detail/${eventId}`;

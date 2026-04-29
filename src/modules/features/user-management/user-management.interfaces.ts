@@ -76,4 +76,5 @@ export interface CreateUser {
   fullName: string;
   roleId: string;
   id?:string
+  profilePicture:string
 }

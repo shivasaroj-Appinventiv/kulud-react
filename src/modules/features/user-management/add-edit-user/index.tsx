@@ -15,21 +15,22 @@ import {
 } from "@mui/material";
 import { UploadIcon } from "lucide-react";
 import { useRef, useState } from "react";
+import ImageUpload from "@/components/image-uploader";
 
 // ── Country codes ──────────────────────────────────────────────
 const countryCodes = [
   { code: "+974", flag: "🇶🇦", iso: "QA" },
-  { code: "+91",  flag: "🇮🇳", iso: "IN" },
-  { code: "+1",   flag: "🇺🇸", iso: "US" },
-  { code: "+44",  flag: "🇬🇧", iso: "GB" },
+  { code: "+91", flag: "🇮🇳", iso: "IN" },
+  { code: "+1", flag: "🇺🇸", iso: "US" },
+  { code: "+44", flag: "🇬🇧", iso: "GB" },
   { code: "+971", flag: "🇦🇪", iso: "AE" },
 ];
 
 // ── Theme tokens ───────────────────────────────────────────────
-const BRAND          = "#155dfc";
-const BRAND_HOVER    = "#0a3ecf";
+const BRAND = "#155dfc";
+const BRAND_HOVER = "#0a3ecf";
 const BRAND_DISABLED = "#a3bffd";
-const BRAND_LIGHT    = "#eff4ff";
+const BRAND_LIGHT = "#eff4ff";
 
 // ── Shared MUI sx helpers ──────────────────────────────────────
 const textFieldSx = {
@@ -82,15 +83,22 @@ const FieldLabel = ({
 
 // ── Component ──────────────────────────────────────────────────
 const AddEditUser = () => {
-  const { breadcrumbs, formik, roles, branches, handleCancel, id } =
-    useAddEditUserHelper();
+  const {
+    breadcrumbs,
+    formik,
+    roles,
+    branches,
+    handleCancel,
+    id,
+    VITE_IMAGE_PREFIX,
+    setImageFile,
+  } = useAddEditUserHelper();
 
-  const fileInputRef                      = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  const [countryCode, setCountryCode]     = useState("+974");
+  const [countryCode, setCountryCode] = useState("+974");
 
   const handleAvatarClick = () => fileInputRef.current?.click();
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -121,57 +129,30 @@ const AddEditUser = () => {
         {/* ── Avatar upload ── */}
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mb: 4 }}>
           <Box sx={{ position: "relative", width: 120, height: 120 }}>
-            {/* Dashed circular border */}
-            <Box
-              onClick={handleAvatarClick}
-              sx={{
-                width: 120,
-                height: 120,
-                borderRadius: "50%",
-                border: `2px dashed ${BRAND}`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
+            <ImageUpload
+              value={
+                typeof formik.values.profilePicture === "string" &&
+                !!formik.values.profilePicture
+                  ? encodeURI(
+                      `${VITE_IMAGE_PREFIX}/${formik.values.profilePicture}`,
+                    )
+                  : formik.values.profilePicture
+              }
+              cropShape="round"
+              aspectRatio={1}
+              onChange={(file) => {
+                console.log(file);
+                
+                setImageFile(file);
+                formik.setFieldValue("profilePicture", file);
               }}
-            >
-              <Avatar
-                src={avatarPreview || undefined}
-                sx={{
-                  width: 112,
-                  height: 112,
-                  bgcolor: "#F1F5F9",
-                  color: "#9CA3AF",
-                }}
-              />
-            </Box>
-
-            {/* Upload icon button */}
-            <IconButton
-              size="small"
-              onClick={handleAvatarClick}
-              sx={{
-                position: "absolute",
-                top: 2,
-                right: 2,
-                bgcolor: BRAND,
-                color: "#fff",
-                width: 28,
-                height: 28,
-                "&:hover": { bgcolor: BRAND_HOVER },
-                boxShadow: "0 2px 6px rgba(21,93,252,0.4)",
-              }}
-            >
-              <UploadIcon size={14} />
-            </IconButton>
-
-            {/* Hidden file input */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/jpeg,image/png"
-              hidden
-              onChange={handleFileChange}
+              enableCrop={true}
+              renderPlaceholder={
+                <div className="flex flex-col items-center text-gray-400 text-sm">
+                  {/* <MdOutlineFileUpload /> */}
+                  Upload
+                </div>
+              }
             />
           </Box>
 
@@ -199,8 +180,7 @@ const AddEditUser = () => {
            *  Branch     → narrow ~1.5 units
            * Total = 10.5 → we use lg={2.4} each for equal, or custom below
            */}
-          <Grid container spacing={2} alignItems="flex-start">
-
+          <Grid container spacing={2}>
             {/* Full Name */}
             <Grid item xs={12} sm={6} lg={2.5}>
               <FieldLabel text="Full Name" required />
@@ -354,7 +334,6 @@ const AddEditUser = () => {
                 ))}
               </Select>
             </Grid>
-
           </Grid>
 
           {/* ── Action Buttons ── */}

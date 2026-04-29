@@ -21,14 +21,17 @@ import {
 } from "../../roles-and-permissions/roles-and-permissions.slice";
 import type { CreateUser } from "../user-management.interfaces";
 import { userValidationSchema } from "@/schemas";
+import endPoints from "@/api/endPoints";
+import { getPresignedUrl, uploadFileToS3 } from "@/redux/slices/global.slice";
 
 const useAddEditUserHelper = () => {
   const { id } = useParams<string>();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-
+  const VITE_IMAGE_PREFIX = import.meta.env.VITE_IMAGE_PREFIX;
   const [roles, setRoles] = useState<any[]>([]);
   const [branches, setBranches] = useState<any[]>([]);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const details = useAppSelector(
     (state: RootState) => state.userManagement.details,
@@ -53,14 +56,54 @@ const useAddEditUserHelper = () => {
     [id],
   );
 
+  const uploadImage = async (): Promise<string> => {
+    try {
+      if (!imageFile) return "";
+      
+      const presignedRes = await dispatch(
+        getPresignedUrl(imageFile.name),
+      ).unwrap();
+
+      await dispatch(
+        uploadFileToS3({
+          preSignedUrl: presignedRes.presignedUrl,
+          file: imageFile,
+        }),
+      ).unwrap();
+
+      return presignedRes.key;
+    } catch (error) {
+      console.error(error);
+      return "";
+    }
+  };
+
   const handleSubmit = async (values: CreateUser) => {
     try {
-      if (id) {
-        const payload = { ...values, id };
-        await dispatch(updateUser(payload)).unwrap();
-      } else {
-        await dispatch(createUser(values)).unwrap();
+      let profilePicture = values.profilePicture;
+
+      // Upload image if selected
+      if (imageFile) {
+        debugger
+        profilePicture = await uploadImage();
       }
+
+      const payload = {
+        ...values,
+        profilePicture,
+      };
+
+      if (id) {
+        await dispatch(
+          updateUser({
+            ...payload,
+            id,
+          }),
+        ).unwrap();
+      } else {
+        await dispatch(createUser(payload)).unwrap();
+      }
+
       navigate(ROUTES.USER_MANAGEMENT);
     } catch (error) {
       console.error(error);
@@ -123,6 +166,9 @@ const useAddEditUserHelper = () => {
     branches,
     handleCancel,
     id,
+    VITE_IMAGE_PREFIX,
+    imageFile,
+    setImageFile,
   };
 };
 
