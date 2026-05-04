@@ -1,3 +1,4 @@
+import type { PermissionAction } from "@/utils/permissions";
 import type { ReactNode } from "react";
 
 export interface AppRoute {
@@ -8,7 +9,7 @@ export interface AppRoute {
   // Guards
   isPrivate?: boolean;
   roles?: string[];
-  permissions?: string[];
+  action?: PermissionAction;
 
   // Layout
   Layout?: React.ComponentType<any>;

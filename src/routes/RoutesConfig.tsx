@@ -4,6 +4,7 @@ import type { AppRoute } from "@/types/routeTypes";
 import AuthLayout from "@/layouts/auth/AuthLayout";
 import DashboardLayout from "@/layouts/dashboard/DashboardLayout";
 import { Navigate } from "react-router-dom";
+import { FEATURE_SLUGS } from "@/constants/feature-slugs.enum";
 
 // Auth
 const Login = lazy(() => import("@auth/login"));
@@ -72,24 +73,31 @@ export const APP_ROUTES: AppRoute[] = [
     path: ROUTES.DASHBOARD, // "/"
     Layout: DashboardLayout,
     isPrivate: true,
+    action:"view",
+    name: FEATURE_SLUGS.DASHBOARD,
     element: <Dashboard />,
   },
   {
     path: ROUTES.PROFILE, // "/"
     Layout: DashboardLayout,
     isPrivate: true,
+    action:"view",
     element: <Profile />,
   },
   {
     path: ROUTES.USER_MANAGEMENT, // "/users"
     Layout: DashboardLayout,
     isPrivate: true,
+    action:"view",
+    name: FEATURE_SLUGS.USER,
     element: <UserList />,
   },
   {
     path: ROUTES.Add_USER, // "/users"
     Layout: DashboardLayout,
     isPrivate: true,
+    action:"edit",
+    name: FEATURE_SLUGS.USER,
     element: <AddUser />,
   },
 
@@ -97,6 +105,8 @@ export const APP_ROUTES: AppRoute[] = [
     path: ROUTES.EDIT_USER(":id"), // "/users/:id"
     Layout: DashboardLayout,
     isPrivate: true,
+    name: FEATURE_SLUGS.USER,
+    action:"edit",
     element: <AddUser />,
   },
 
@@ -104,24 +114,32 @@ export const APP_ROUTES: AppRoute[] = [
     path: ROUTES.USER_DETAILS,
     Layout: DashboardLayout,
     isPrivate: true,
+    action:"view",
+    name: FEATURE_SLUGS.USER,
     element: <UserDetails />,
   },
   {
     path: ROUTES.ROLES_AND_PERMISSIONS,
     Layout: DashboardLayout,
     isPrivate: true,
+    action:"view",
+    name: FEATURE_SLUGS.ROLES,
     element: <RolesAndPermission />,
   },
   {
     path: ROUTES.ROLES_DETAILS,
     Layout: DashboardLayout,
     isPrivate: true,
+    action:"view",
+    name: FEATURE_SLUGS.ROLES,
     element: <RoleDetails />,
   },
   {
     path: ROUTES.ADD_ROLES,
     Layout: DashboardLayout,
     isPrivate: true,
+    action:"edit",
+    name: FEATURE_SLUGS.ROLES,
     element: <AddEditRole />,
   },
 
@@ -129,6 +147,8 @@ export const APP_ROUTES: AppRoute[] = [
     path: ROUTES.EDIT_ROLES,
     Layout: DashboardLayout,
     isPrivate: true,
+    action: "edit",
+    name: FEATURE_SLUGS.ROLES,
     element: <AddEditRole />,
   },
 
@@ -137,14 +157,15 @@ export const APP_ROUTES: AppRoute[] = [
     Layout: DashboardLayout,
     isPrivate: true,
     element: <CMS />,
+    action:"view",
     children: [
       {
         path: "",
         element: <Navigate to="about-us" replace />, // ✅ default route
       },
-      { path: "about-us", element: <About /> },
-      { path: "privacy-policy", element: <Privacy /> },
-      { path: "terms", element: <Terms /> },
+      { path: "about-us", action:"edit",  name:FEATURE_SLUGS.CMS,  element: <About /> },
+      { path: "privacy-policy", action:"edit", name:FEATURE_SLUGS.CMS, element: <Privacy /> },
+      { path: "terms", action:"edit",  name:FEATURE_SLUGS.CMS,element: <Terms /> },
     ],
   },
 ];

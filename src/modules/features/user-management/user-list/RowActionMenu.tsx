@@ -40,7 +40,7 @@ const RowActionMenu = ({
         >
           Details
         </MenuItem>
-        <MenuItem
+        <MenuItem disabled={row.status === STATUS_TYPE_VALUE.INACTIVE}
           onClick={() => {
             onEdit(row);
             handleClose();

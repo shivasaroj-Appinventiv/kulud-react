@@ -7,7 +7,6 @@ import RouteGuard from "../guards/routeGuard";
 import { Suspense } from "react";
 
 const AppRouter = () => {
-  const loggedIn = !!localStorage.getItem("token");
 
   return (
     <Routes>
@@ -22,6 +21,8 @@ const AppRouter = () => {
               path={route.path}
               element={
                 <RouteGuard
+                  module={route?.name}
+                  action={route?.action}
                   isPrivate={route.isPrivate}
                   hideAfterLogin={route.hideAfterLogin}
                 >
@@ -37,11 +38,7 @@ const AppRouter = () => {
                 <Route
                   key={childIndex}
                   path={child.path}
-                  element={
-                    <Suspense fallback={null}>
-                      {child.element}
-                    </Suspense>
-                  }
+                  element={<Suspense fallback={null}>{child.element}</Suspense>}
                 />
               ))}
             </Route>
@@ -55,13 +52,13 @@ const AppRouter = () => {
             path={route.path}
             element={
               <RouteGuard
+                module={route?.name}
+                action={route?.action}
                 isPrivate={route.isPrivate}
                 hideAfterLogin={route.hideAfterLogin}
               >
                 <Layout>
-                  <Suspense fallback={null}>
-                    {route.element}
-                  </Suspense>
+                  <Suspense fallback={null}>{route.element}</Suspense>
                 </Layout>
               </RouteGuard>
             }

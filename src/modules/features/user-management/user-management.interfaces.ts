@@ -6,7 +6,7 @@ export interface UserManagementSlice {
   status: ApiState;
   error: string | null;
   totalDocs: number;
-  details: User | null;
+  details: User|null;
 }
 
 export interface Role {
@@ -46,7 +46,7 @@ export interface User {
   phone: string;
   fullPhoneNo: string;
 
-  profilePicture: string | null;
+  profilePicture: string ;
 
   status: "ACTIVE" | "INACTIVE";
   userType: "SUB_ADMIN" | "ADMIN" | string;
@@ -73,8 +73,10 @@ export interface User {
 export interface CreateUser {
   branchId: string;
   countryCode: string;
+  contactPersonPhone?:string;
   fullName: string;
   roleId: string;
   id?:string
+  email?:string,
   profilePicture:string
 }

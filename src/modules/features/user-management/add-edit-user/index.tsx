@@ -2,10 +2,8 @@ import Breadcrumb from "@/components/breadcrumb";
 import useAddEditUserHelper from "./add-edit-user.helper";
 import {
   Grid,
-  Avatar,
   Box,
   Card,
-  IconButton,
   Typography,
   TextField,
   Select,
@@ -13,8 +11,7 @@ import {
   Button,
   FormHelperText,
 } from "@mui/material";
-import { UploadIcon } from "lucide-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import ImageUpload from "@/components/image-uploader";
 
 // ── Country codes ──────────────────────────────────────────────
@@ -94,21 +91,7 @@ const AddEditUser = () => {
     setImageFile,
   } = useAddEditUserHelper();
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  const [countryCode, setCountryCode] = useState("+974");
 
-  const handleAvatarClick = () => fileInputRef.current?.click();
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.size > 200 * 1024) {
-      alert("File size must be under 200 KB");
-      return;
-    }
-    setAvatarPreview(URL.createObjectURL(file));
-    // formik.setFieldValue("profilePic", file);
-  };
 
   return (
     <div>
@@ -131,18 +114,16 @@ const AddEditUser = () => {
           <Box sx={{ position: "relative", width: 120, height: 120 }}>
             <ImageUpload
               value={
-                typeof formik.values.profilePicture === "string" &&
-                !!formik.values.profilePicture
+                typeof formik.values?.profilePicture === "string" &&
+                !!formik.values?.profilePicture
                   ? encodeURI(
-                      `${VITE_IMAGE_PREFIX}/${formik.values.profilePicture}`,
+                      `${VITE_IMAGE_PREFIX}${formik.values?.profilePicture}`,
                     )
-                  : formik.values.profilePicture
+                  : formik.values?.profilePicture
               }
               cropShape="round"
               aspectRatio={1}
-              onChange={(file) => {
-                console.log(file);
-                
+              onChange={(file) => {                
                 setImageFile(file);
                 formik.setFieldValue("profilePicture", file);
               }}
@@ -237,8 +218,8 @@ const AddEditUser = () => {
                 {/* Country code Select */}
                 <Select
                   size="small"
-                  value={countryCode}
-                  onChange={(e) => setCountryCode(e.target.value)}
+                  value={formik.values.countryCode}
+                  onChange={(e) => {formik.setFieldValue("countryCode",e.target.value)}}
                   renderValue={(val) => {
                     const found = countryCodes.find((c) => c.code === val);
                     return (
@@ -299,6 +280,7 @@ const AddEditUser = () => {
               <FieldLabel text="Email" required />
               <TextField
                 fullWidth
+                disabled={!!id}
                 size="small"
                 name="email"
                 placeholder="Enter Email"

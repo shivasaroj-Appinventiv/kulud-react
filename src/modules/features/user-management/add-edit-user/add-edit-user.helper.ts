@@ -21,7 +21,6 @@ import {
 } from "../../roles-and-permissions/roles-and-permissions.slice";
 import type { CreateUser } from "../user-management.interfaces";
 import { userValidationSchema } from "@/schemas";
-import endPoints from "@/api/endPoints";
 import { getPresignedUrl, uploadFileToS3 } from "@/redux/slices/global.slice";
 
 const useAddEditUserHelper = () => {
@@ -32,7 +31,7 @@ const useAddEditUserHelper = () => {
   const [roles, setRoles] = useState<any[]>([]);
   const [branches, setBranches] = useState<any[]>([]);
   const [imageFile, setImageFile] = useState<File | null>(null);
-
+  const [countryCode, setCountryCode] = useState("+974");
   const details = useAppSelector(
     (state: RootState) => state.userManagement.details,
   );
@@ -59,7 +58,7 @@ const useAddEditUserHelper = () => {
   const uploadImage = async (): Promise<string> => {
     try {
       if (!imageFile) return "";
-      
+
       const presignedRes = await dispatch(
         getPresignedUrl(imageFile.name),
       ).unwrap();
@@ -84,8 +83,11 @@ const useAddEditUserHelper = () => {
 
       // Upload image if selected
       if (imageFile) {
-        debugger
         profilePicture = await uploadImage();
+        formik.setFieldValue("profilePicture", profilePicture);
+
+        // prevent re-upload
+        setImageFile(null);
       }
 
       const payload = {
@@ -93,6 +95,8 @@ const useAddEditUserHelper = () => {
         profilePicture,
       };
 
+      delete payload.email;
+      delete payload.contactPersonPhone;
       if (id) {
         await dispatch(
           updateUser({
@@ -115,11 +119,9 @@ const useAddEditUserHelper = () => {
     initialValues: {
       fullName: details?.fullName || "",
       email: details?.email || "",
-      profilePicture:
-        details?.profilePicture ||
-        "profile/Screenshot from 2026-04-19 15-56-51.png",
+      profilePicture: details?.profilePicture || "",
       roleId: details?.roleId || "",
-      countryCode: details?.countryCode || "91",
+      countryCode: details?.countryCode || "+91",
       phone: details?.phone || "",
       contactPersonPhone: details?.contactPersonPhone || "",
       branchId: details?.branchId || "",
@@ -169,6 +171,8 @@ const useAddEditUserHelper = () => {
     VITE_IMAGE_PREFIX,
     imageFile,
     setImageFile,
+    countryCode,
+    setCountryCode,
   };
 };
 

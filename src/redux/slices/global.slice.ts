@@ -24,9 +24,13 @@ export const getPresignedUrl = createAsyncThunk(
     try {
       thunkAPI.dispatch(setLoading(true));
 
-      const res = await http.get(endPoints.FILE_UPLOAD, {
-        params: { fileName: payload }, // adjust key to match your API expectation
-      });
+      const body={
+        filename: payload,
+        uploadType : payload?.uploadType?? 'profile/',
+      }
+
+      const res = await http.post(endPoints.FILE_UPLOAD, body
+      );
       return res.data.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
