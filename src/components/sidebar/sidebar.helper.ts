@@ -44,7 +44,13 @@ const useSidebarHelper = () => {
   const location = useLocation();
   const userData = useAppSelector((state) => state.auth.admin);
   const permissions = userData.role?.permissions || [];
-  const filteredMenus = menuItems.filter((item)=>hasPermission(permissions,item.feature,"view"))
+  const filteredMenus = menuItems.filter((item) => {
+    if (userData.userType === "ADMIN") {
+      return true;
+    }
+
+    return hasPermission(permissions, item.feature, "view");
+  });
 
   useEffect(() => {
     if (!userData?.email) {
@@ -58,7 +64,7 @@ const useSidebarHelper = () => {
     }
     return location.pathname.startsWith(path);
   };
-  return { isActive, menuItems:filteredMenus, userData };
+  return { isActive, menuItems: filteredMenus, userData };
 };
 
 export default useSidebarHelper;

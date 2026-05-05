@@ -7,16 +7,22 @@ interface RouteGuardProps {
   children: React.ReactNode;
   isPrivate?: boolean;
   hideAfterLogin?: boolean;
-  module?:string,
-  action?:PermissionAction
+  module?: string;
+  action?: PermissionAction;
 }
 
-const RouteGuard = ({ children, isPrivate, hideAfterLogin,module,action }: RouteGuardProps) => {
+const RouteGuard = ({
+  children,
+  isPrivate,
+  hideAfterLogin,
+  module,
+  action,
+}: RouteGuardProps) => {
   const loggedIn = !!localStorage.getItem("token");
-    const userData = useAppSelector((state) => state.auth.admin);
-    const permissions = userData.role?.permissions || [];
-  
-console.log(module,action,permissions,"module and action in guard");
+  const userData = useAppSelector((state) => state.auth.admin);
+  const permissions = userData.role?.permissions || [];
+
+  console.log(module, action, permissions, "module and action in guard");
 
   if (isPrivate && !loggedIn) {
     return <Navigate to={ROUTES.LOGIN} replace />;
@@ -25,14 +31,15 @@ console.log(module,action,permissions,"module and action in guard");
   if (hideAfterLogin && loggedIn) {
     return <Navigate to={ROUTES.DASHBOARD} replace />;
   }
-if (isPrivate && module && action) {
+  if (isPrivate && module && action && userData.userType !== "ADMIN") {
+
+
     const allowed = hasPermission(permissions, module, action);
     if (!allowed) {
       return <Navigate to={ROUTES.PROFILE} replace />;
     }
   }
-    return <>{children}</>;
-
+  return <>{children}</>;
 };
 
 export default RouteGuard;
