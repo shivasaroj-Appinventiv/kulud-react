@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import ImageUpload from "@/components/image-uploader";
+import { Upload } from "lucide-react";
 
 // ── Country codes ──────────────────────────────────────────────
 const countryCodes = [
@@ -130,7 +131,7 @@ const AddEditUser = () => {
               enableCrop={true}
               renderPlaceholder={
                 <div className="flex flex-col items-center text-gray-400 text-sm">
-                  {/* <MdOutlineFileUpload /> */}
+                  <Upload />
                   Upload
                 </div>
               }

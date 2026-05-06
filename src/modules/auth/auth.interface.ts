@@ -18,6 +18,7 @@ export interface Admin {
 
 export interface Auth {
   admin: Admin;
+  isPermissionsLoaded:boolean;
 }
 
 export interface UpdateProfile {

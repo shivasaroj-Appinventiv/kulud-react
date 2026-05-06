@@ -5,9 +5,10 @@ import WildCardRoute from "../modules/WildCardRoute";
 import type { AppRoute } from "@/types/routeTypes";
 import RouteGuard from "../guards/routeGuard";
 import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "@/components/ErrorFallback";
 
 const AppRouter = () => {
-
   return (
     <Routes>
       {APP_ROUTES.map((route: AppRoute, index: number) => {
@@ -20,18 +21,23 @@ const AppRouter = () => {
               key={index}
               path={route.path}
               element={
-                <RouteGuard
-                  module={route?.name}
-                  action={route?.action}
-                  isPrivate={route.isPrivate}
-                  hideAfterLogin={route.hideAfterLogin}
+                <ErrorBoundary
+                  FallbackComponent={ErrorFallback}
+                  onReset={() => window.location.reload()}
                 >
-                  <Layout>
-                    <Suspense fallback={null}>
-                      {route.element ?? <Outlet />}
-                    </Suspense>
-                  </Layout>
-                </RouteGuard>
+                  <RouteGuard
+                    module={route?.name}
+                    action={route?.action}
+                    isPrivate={route.isPrivate}
+                    hideAfterLogin={route.hideAfterLogin}
+                  >
+                    <Layout>
+                      <Suspense fallback={null}>
+                        {route.element ?? <Outlet />}
+                      </Suspense>
+                    </Layout>
+                  </RouteGuard>
+                </ErrorBoundary>
               }
             >
               {route.children.map((child, childIndex) => (
@@ -51,16 +57,21 @@ const AppRouter = () => {
             key={index}
             path={route.path}
             element={
-              <RouteGuard
-                module={route?.name}
-                action={route?.action}
-                isPrivate={route.isPrivate}
-                hideAfterLogin={route.hideAfterLogin}
+              <ErrorBoundary
+                FallbackComponent={ErrorFallback}
+                onReset={() => window.location.reload()}
               >
-                <Layout>
-                  <Suspense fallback={null}>{route.element}</Suspense>
-                </Layout>
-              </RouteGuard>
+                <RouteGuard
+                  module={route?.name}
+                  action={route?.action}
+                  isPrivate={route.isPrivate}
+                  hideAfterLogin={route.hideAfterLogin}
+                >
+                  <Layout>
+                    <Suspense fallback={null}>{route.element}</Suspense>
+                  </Layout>
+                </RouteGuard>
+              </ErrorBoundary>
             }
           />
         );

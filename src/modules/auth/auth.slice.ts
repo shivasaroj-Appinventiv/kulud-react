@@ -26,6 +26,7 @@ const AUTH_SLICE_INITIAL_STATE: Auth = {
     status: "ACTIVE",
     userType: ""
   },
+  isPermissionsLoaded: false
 };
 
 export const authSlice = createSlice({
@@ -46,10 +47,14 @@ export const authSlice = createSlice({
     builder.addCase(getProfileDetails.fulfilled, (state, action) => {
 
       state.admin = { ...action.payload };
+      state.isPermissionsLoaded = true;
     });
     builder.addCase(forgotPassword.fulfilled, (state, action) => {});
     builder.addCase(forgotPassword.rejected, (state, action) => {});
     builder.addCase(verifyOTP.fulfilled, (state, action) => {});
+    builder.addCase(logout.fulfilled,(state,action)=>{
+      state.isPermissionsLoaded = false;
+    })
   },
 });
 
