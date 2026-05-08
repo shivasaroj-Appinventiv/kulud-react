@@ -13,37 +13,6 @@ interface RouteGuardProps {
   action?: PermissionAction;
 }
 
-// const RouteGuard = ({
-//   children,
-//   isPrivate,
-//   hideAfterLogin,
-//   module,
-//   action,
-// }: RouteGuardProps) => {
-//   const loggedIn = !!localStorage.getItem("token");
-//   const userData = useAppSelector((state) => state.auth.admin);
-//   const permissions = userData.role?.permissions || [];
-
-//   console.log(module, action, permissions, "module and action in guard");
-
-//   if (isPrivate && !loggedIn) {
-//     return <Navigate to={ROUTES.LOGIN} replace />;
-//   }
-
-//   if (hideAfterLogin && loggedIn) {
-//     return <Navigate to={ROUTES.DASHBOARD} replace />;
-//   }
-//   if (isPrivate && module && action && userData.userType !== "ADMIN") {
-
-
-//     const allowed = hasPermission(permissions, module, action);
-//     if (!allowed) {
-//       return <Navigate to={ROUTES.PROFILE} replace />;
-//     }
-//   }
-//   return <>{children}</>;
-// };
-
 
 const RouteGuard = ({ children, isPrivate, hideAfterLogin, module, action }: RouteGuardProps) => {
   const loggedIn = !!localStorage.getItem("token");
@@ -63,7 +32,7 @@ const RouteGuard = ({ children, isPrivate, hideAfterLogin, module, action }: Rou
     return <Loader />;
   }
 
-  if (isPrivate && module && action) {
+  if (isPrivate && module && action && userData.userType != "ADMIN") {
     const allowed = hasPermission(permissions, module, action);
     if (!allowed) {
       // Try dashboard first, fall back to profile (no permission needed)

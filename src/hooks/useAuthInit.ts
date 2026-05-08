@@ -1,13 +1,14 @@
 import { getProfileDetails } from "@/modules/auth/auth.slice";
-import type { AppDispatch } from "@/redux/store";
+import { useAppSelector, type AppDispatch } from "@/redux/store";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 const useAuthInit = () => {
   const dispatch = useDispatch<AppDispatch>();
   const loggedIn = !!localStorage.getItem("token");
+  const isPermissionsLoaded = useAppSelector((state)=>state.auth.isPermissionsLoaded);
   useEffect(() => {
-    if (loggedIn) {
+    if (loggedIn && !isPermissionsLoaded) {
       dispatch(getProfileDetails());
     }
   }, []);

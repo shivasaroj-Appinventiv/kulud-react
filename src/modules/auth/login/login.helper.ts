@@ -5,7 +5,7 @@ import { useState } from "react";
 import { ROUTES } from "../../../routes/RouteConstant";
 import { Formik, useFormik } from "formik";
 import * as Yup from "yup";
-import { login } from "../auth.slice";
+import { getProfileDetails, login } from "../auth.slice";
 import { EMAIL, PASSWORD_PATTERN } from "../../../constants/patterns";
 import { Messages } from "../../../constants/messages";
 
@@ -38,6 +38,7 @@ const useLoginHelper = () => {
 
     const response = await dispatch(login(payloadToSend)).unwrap();    
     localStorage.setItem("token", response.data.data.accessToken);
+    await dispatch(getProfileDetails()).unwrap();
     navigate(ROUTES.DASHBOARD);
   };
 
