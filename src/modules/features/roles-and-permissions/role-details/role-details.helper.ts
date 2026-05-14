@@ -33,10 +33,13 @@ const useRoleDetailsHelper = () => {
 
   const getDetails = () => {
     dispatch(getRoleDetails(id || ""));
+    
   };
+
 
   useEffect(() => {
     getDetails();
+    
     return () => {
       dispatch(resetRoleDetails());
     };

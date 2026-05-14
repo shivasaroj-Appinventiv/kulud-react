@@ -27,7 +27,6 @@ const UserFilter = ({
   isApplied: boolean;
 }) => {
   const [statusOpen, setStatusOpen] = useState(true);
-  const [dateOpen, setDateOpen] = useState(true);
   const handleApply = (values: FilterValues) => {
     const { createdFrom, createdTo } = toISTRangeUTC(values.createdFrom, values.createdTo);
     onApply({ ...values, createdFrom, createdTo }); // ✅ sends ISO UTC strings to API
@@ -52,13 +51,6 @@ const UserFilter = ({
     formik.setFieldValue("status", updated);
   };
 
-  // const handleFilterReset = () => {
-  //   formik.resetForm();
-  //   onClose();
-  //   if(isApplied){
-  //       onApply({status:[],createdFrom:null,createdTo:null});
-  //   }
-  // };
 
   const handleFilterReset = () => {
   const empty = { status: [], createdFrom: null, createdTo: null };

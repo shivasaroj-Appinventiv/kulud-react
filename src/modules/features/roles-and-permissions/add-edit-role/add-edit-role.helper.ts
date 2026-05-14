@@ -41,7 +41,7 @@ export const useAddEditRoleHelper = () => {
   const permissionsList = useAppSelector(
     (state) => state.permissionsSlice.permissions,
   );
-  const roleDetails = useAppSelector((state) => state.permissionsSlice.details);
+  const roleDetails = useAppSelector((state) => state.permissionsSlice.roleDetails);
 
 
 

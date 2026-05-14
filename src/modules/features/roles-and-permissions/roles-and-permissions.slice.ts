@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { http } from "@/api/http.service";
 import type {
   RoleState,
-  RoleListResponse,
   Role,
   Permission,
   PermissionGroup,
@@ -23,12 +22,9 @@ const initialState: RoleState = {
   error: "",
   status: "idle",
   totalDocs: 0,
-  details: null,
 };
 
-// ==============================
-// ✅ API CALLS
-// ==============================
+
 
 export const getRoles = createAsyncThunk(
   "roles/getRoles",
@@ -106,6 +102,8 @@ export const getRoleDetails = createAsyncThunk<Role, string>(
     try {
       thunkAPI.dispatch(setLoading(true));
       const res = await http.get(endPoints.GET_ROLE_BY_ID(roleId));
+      console.log(res.data.data);
+      
       return res.data.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -170,7 +168,7 @@ const rolesSlice = createSlice({
   initialState,
   reducers: {
     resetRoleDetails: (state) => {
-      state.details = null;
+      state.roleDetails = null;
     },
 
     setParams: (state, action) => {
@@ -234,8 +232,8 @@ const rolesSlice = createSlice({
       })
 
       // DETAILS
-      .addCase(getRoleDetails.fulfilled, (state, action) => {
-        state.details = action.payload;
+      .addCase(getRoleDetails.fulfilled, (state, action) => {        
+        state.roleDetails = action.payload;
       })
 
       // DELETE

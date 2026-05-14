@@ -3,7 +3,7 @@ import type { AppDispatch } from "../../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ROUTES } from "../../../routes/RouteConstant";
-import { Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import { getProfileDetails, login } from "../auth.slice";
 import { EMAIL, PASSWORD_PATTERN } from "../../../constants/patterns";

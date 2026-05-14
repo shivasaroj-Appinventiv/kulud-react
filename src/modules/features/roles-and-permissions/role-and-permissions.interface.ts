@@ -43,6 +43,5 @@ export interface RoleState {
   params:any;
   status:ApiState;
   totalDocs: number;
-  details:any
 
 }

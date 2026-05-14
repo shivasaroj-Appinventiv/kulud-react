@@ -104,7 +104,7 @@ export const getUsersList = createAsyncThunk(
         endPoints.userList,
         query,
       );
-      return response.data.data;
+      return response.data.data; 
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     } finally {
