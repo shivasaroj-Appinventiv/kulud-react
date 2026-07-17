@@ -1,17 +1,3 @@
-import { useState } from "react";
-
-export const useUserFilterHelper = () => {
-  const [filters, setFilters] = useState({
-    status: [],
-    createdFrom: "",
-    createdTo: "",
-  })
-  ;
-  return {};
-};
-
-
-
 export const toISTRangeUTC = (from: string | null, to: string | null) => {
   const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000; // 330 minutes
 

@@ -8,12 +8,10 @@ import type { User } from "../user-management.interfaces";
 const RowActionMenu = ({
   row,
   onDetails,
-  onEdit,
   onStatusUpdate,
 }: {
   row: any;
   onDetails: (row: User) => void;
-  onEdit: (row: User) => void;
   onStatusUpdate: (row: User) => void;
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

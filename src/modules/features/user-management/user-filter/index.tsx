@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { ChevronDown, ChevronUp, CalendarDays, X, SlidersHorizontal } from "lucide-react";
+import { ChevronDown, ChevronUp, X, SlidersHorizontal } from "lucide-react";
 import { toISTRangeUTC } from "./user-filter.hepler";
 
 interface FilterValues {
@@ -27,7 +27,6 @@ const UserFilter = ({
   isApplied: boolean;
 }) => {
   const [statusOpen, setStatusOpen] = useState(true);
-  const [dateOpen, setDateOpen] = useState(true);
   const handleApply = (values: FilterValues) => {
     const { createdFrom, createdTo } = toISTRangeUTC(values.createdFrom, values.createdTo);
     onApply({ ...values, createdFrom, createdTo }); // ✅ sends ISO UTC strings to API

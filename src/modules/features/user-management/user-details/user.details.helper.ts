@@ -31,7 +31,7 @@ export const useUserDetailsHelper = () => {
   }, [id, dispatch]);
 
   const updateStatusOnConfirmation = async (data: { userId: string; type: string }) => {
-    const res = await dispatch(updateUserStatus(data)).unwrap();
+    await dispatch(updateUserStatus(data)).unwrap();
 
     getUserDetailsFromId();
   };

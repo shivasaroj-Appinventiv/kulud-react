@@ -7,16 +7,14 @@ import {
   FieldArray,
   FormikProvider,
   useFormik,
-  type FormikValues,
 } from "formik";
 import { addUpdateOrganizationSchema } from "../../../../schemas";
 
 const EditOrganization = () => {
   const { id } = useParams();
-  const initialValue: FormikValues = { name: "", email: "" };
   const dispatch = useDispatch<AppDispatch>();
 
-  const { details, status } = useAppSelector(
+  const { details } = useAppSelector(
     (state) => state.organizationManagement,
   );
 

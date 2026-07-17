@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { User, UserManagementSlice } from "./user-management.interfaces";
+import type { UserManagementSlice } from "./user-management.interfaces";
 import { setLoading } from "../../../redux/slices/global.slice";
 import { http } from "../../../api/http.service";
 import endPoints from "../../../api/endPoints";
@@ -25,7 +25,7 @@ const userManagementSlice = createSlice({
     setParams: (state,action)=>{
       state.params=action.payload;
     },
-    resetParams:(state,action)=>{
+    resetParams:(state)=>{
       state.params=DEFAULT_PAGE_OPTIONS
     }
   },
@@ -38,11 +38,7 @@ const userManagementSlice = createSlice({
     });
     builder.addCase(getUsersList.fulfilled, (state, action) => {
       state.status = "succeeded";
-      console.log(action.payload.items);
-      
       state.usersLists = action.payload.items;
-      console.log(state.usersLists);
-      
       state.totalDocs = action.payload.meta.totalItems;
     });
     builder.addCase(getUsersList.rejected, (state) => {
@@ -68,7 +64,7 @@ const userManagementSlice = createSlice({
     builder.addCase(updateUserStatus.pending, (state) => {
       state.status = "loading";
     });
-    builder.addCase(updateUserStatus.fulfilled, (state, action) => {
+    builder.addCase(updateUserStatus.fulfilled, (state) => {
       state.status = "succeeded";
 
       // // ✅ Update the user's status in the list directly — no refetch needed

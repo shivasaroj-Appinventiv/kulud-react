@@ -42,7 +42,7 @@ const useResetPasswordHelper = () => {
   const handleSubmit = async () => {
     const values = formik.values;
     try {
-      const response = await dispatch(
+      await dispatch(
         resetPassword({
           password: values.password,
           confirmPassword: values.confirmPassword,

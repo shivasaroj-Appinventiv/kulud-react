@@ -37,19 +37,17 @@ export const authSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(login.fulfilled, (state, action) => {
-      
+    builder.addCase(login.fulfilled, () => {
       // state.admin = { ...state.admin, ...action.payload };
     });
-    builder.addCase(login.rejected, (state, action) => {
+    builder.addCase(login.rejected, () => {
     });
     builder.addCase(getProfileDetails.fulfilled, (state, action) => {
-
       state.admin = { ...action.payload };
     });
-    builder.addCase(forgotPassword.fulfilled, (state, action) => {});
-    builder.addCase(forgotPassword.rejected, (state, action) => {});
-    builder.addCase(verifyOTP.fulfilled, (state, action) => {});
+    builder.addCase(forgotPassword.fulfilled, () => {});
+    builder.addCase(forgotPassword.rejected, () => {});
+    builder.addCase(verifyOTP.fulfilled, () => {});
   },
 });
 

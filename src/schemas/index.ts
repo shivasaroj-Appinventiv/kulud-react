@@ -1,5 +1,4 @@
 import * as Yup from "yup";
-import { string } from "yup";
 const LIMIT = {
   MAX_NAME_LENGTH: 50,
   MIN_NAME_LENGTH: 2,

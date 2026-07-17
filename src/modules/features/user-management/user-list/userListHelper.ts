@@ -31,7 +31,7 @@ export const useUserListHelper = () => {
   const breadcrumbs: BreadCrumbType[] = [
     { title: "User Management", path: ROUTES.USER_MANAGEMENT },
   ];
-  const onEdit = (row: any) => {
+  const onEdit = () => {
     // navigate(ROUTES.EDIT_ORGANIZATION_DETAILS(row._id));
   };
   const onDetails = (row: any) => {
@@ -48,15 +48,12 @@ export const useUserListHelper = () => {
   useEffect(() => {
     dispatch(getUsersList(pageOptions));
     return () => {
-      dispatch(resetParams({}));
+      dispatch(resetParams());
     };
   }, [dispatch, pageOptions]);
 
   const { usersLists, status, totalDocs } = useAppSelector(
     (state: RootState) => state.userManagement,
-  );
-  const params = useAppSelector(
-    (state: RootState) => state.userManagement.params,
   );
   const isLoading = status === "loading";
 
@@ -89,7 +86,7 @@ export const useUserListHelper = () => {
 
   const updateStatus = async (data: { userId: string; type: string }) => {
     dispatch(setParams(pageOptions));
-    const res = await dispatch(updateUserStatus(data)).unwrap();
+    await dispatch(updateUserStatus(data)).unwrap();
     dispatch(getUsersList(pageOptions));
   };
   const onStatusUpdate = (userData: User) => {

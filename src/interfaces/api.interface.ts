@@ -23,7 +23,7 @@ export interface PaginatedQuery {
 }
 
 export interface PaginatedResponse<T = any> {
-  [x: string]: PaginatedResponse<Event>;
+  [x: string]: unknown;
   totalDocs?: number;
   data?: Array<T>;
   docs?: Array<T>;

@@ -3,7 +3,7 @@ import type { AppDispatch } from "../../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ROUTES } from "../../../routes/RouteConstant";
-import { Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import { login } from "../auth.slice";
 import { EMAIL, PASSWORD_PATTERN } from "../../../constants/patterns";
@@ -28,15 +28,14 @@ const useLoginHelper = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const handleLogin = async () => {
-    console.log(formik);
     const payloadToSend = {
       email: formik.values.email,
       password: formik.values.password,
     };
 
-    const response = await dispatch(login(payloadToSend)).unwrap();    
+    const response = await dispatch(login(payloadToSend)).unwrap();
     localStorage.setItem("token", response.data.data.accessToken);
     navigate(ROUTES.DASHBOARD);
   };

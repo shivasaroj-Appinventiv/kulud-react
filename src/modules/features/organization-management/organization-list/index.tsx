@@ -42,7 +42,7 @@ const OrganizationList = () => {
                 pageOptions={pageOptions}
                 loading={isLoading}
                 handlePageOptionsChanged={handlePageOptionsChanged}
-                onRowClick={(row) => {}}
+                onRowClick={() => undefined}
 
 
             />

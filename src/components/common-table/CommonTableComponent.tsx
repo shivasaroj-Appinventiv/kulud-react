@@ -5,7 +5,6 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Loader2,
   ListFilterIcon,
 } from "lucide-react";
 import { useCommonTableHelper } from "./common-table.helper";
@@ -158,7 +157,7 @@ const CommonTableComponent = <T,>({
                   .fill(0)
                   .map((_, index) => (
                     <tr key={index}>
-                      {columns.map((column, colIndex) => (
+                      {columns.map((_, colIndex) => (
                         <td key={colIndex} className="px-5 py-3.5">
                           <Skeleton />
                         </td>

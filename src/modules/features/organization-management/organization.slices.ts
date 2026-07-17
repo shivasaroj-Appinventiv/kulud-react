@@ -85,8 +85,8 @@ export const getOrganizationList = createAsyncThunk(
   async (query: PaginatedQuery, thunkApi) => {
     try {
       thunkApi.dispatch(setLoading(true));
-      const { filter = {}, ...rest } = query;
-      const newQuery = { ...rest, ...filter };
+      const { filters = {}, ...rest } = query;
+      const newQuery = { ...rest, ...filters };
 
       const { data } = await http.get<
         ApiResponse<PaginatedResponse<Organization>>

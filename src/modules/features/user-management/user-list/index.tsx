@@ -2,7 +2,6 @@ import Breadcrumb from "../../../../components/breadcrumb";
 import CommonTableComponent from "../../../../components/common-table/CommonTableComponent";
 import { useUserListHelper } from "./userListHelper";
 import UserFilter from "../user-filter";
-import React from "react";
 import RowActionMenu from "./RowActionMenu";
 import { Chip } from "@mui/material";
 const userList = () => {
@@ -11,7 +10,6 @@ const userList = () => {
     totalDocs,
     pageOptions,
     handlePageOptionsChanged,
-    onEdit,
     onDetails,
     breadcrumbs,
     showFilter,
@@ -83,7 +81,6 @@ const userList = () => {
         <RowActionMenu
           row={row}
           onDetails={onDetails}
-          onEdit={onEdit}
           onStatusUpdate={onStatusUpdate}
         />
       ),
@@ -102,7 +99,7 @@ const userList = () => {
         pageSize={10}
         pageOptions={pageOptions}
         handlePageOptionsChanged={handlePageOptionsChanged}
-        onRowClick={(row) => {}}
+        onRowClick={() => undefined}
         onToggleFilter={handleToggleFilter}
         isFilterApplied={isFilterApplied}
 
